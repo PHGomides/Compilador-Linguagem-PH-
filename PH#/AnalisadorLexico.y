@@ -38,54 +38,211 @@ void debug(syntaticno *root);
 %union {
     char *nome;
     int valor_int;
-    float valor_float;
+    double valor_float;
     struct syntaticno *no;
 }
 
 %token TOK_PRINT TOK_INT TOK_FLT TOK_IDENT
-%token TOK_LET
+%token TOK_LET TOK_IF TOK_ELSE TOK_WHILE TOK_FOR TOK_DO
+%token TOK_EQ TOK_NE TOK_LE TOK_GE TOK_AND TOK_OR
 
-%left '+' '-'
-%left '*' '/'
 
 %type <nome> TOK_IDENT
 %type <valor_int> TOK_INT
 %type <valor_float> TOK_FLT
-%type <no> program stmts stmt declaracao atribuicao comando_print tipo_unidade fator_unidade expr term factor
+%type <no> program stmts declaracao atribuicao comando_print tipo_unidade fator_unidade
+%type <no> expr expr_ou expr_e expr_igualdade expr_relacional expr_arit term unary factor
+%type <no> bloco comando_do_while
+%type <no> stmt stmt_completo stmt_incompleto comando_while_completo
 
 %start program
 
 %%
 
 program : stmts     { if (errorc > 0) 
-                         printf("Compilação finalizada com %d erros\n", errorc); 
-                    else 
+                         printf("Compilação finalizada com %d erros\n", errorc);
+                      else 
                          printf("Compilação finalizada sem erros\n");
-                         syntaticno *root = novo_syntaticno("STMTS", 1);
-                         root->filhos[0] = $1;
-                         debug(root);
+                      syntaticno *root = novo_syntaticno("STMTS", 1);
+                      root->filhos[0] = $1;
+                      debug(root);
                     }
         ;
 
-stmts :          { $$ = NULL; }
-      | stmts stmt { 
-                 if ($1 == NULL) 
-                     $$ = $2; 
-                 else {
-                     $$ = novo_syntaticno("stmts", 2);
-                               $$->filhos[0] = $1;
-                               $$->filhos[1] = $2;
-                 }
-               }
+stmts :              { $$ = NULL; }
+      | stmts stmt   { 
+                         if ($1 == NULL) 
+                             $$ = $2;
+                         else {
+                             $$ = novo_syntaticno("stmts", 2);
+                             $$->filhos[0] = $1;
+                             $$->filhos[1] = $2;
+                         }
+                       }
+      ;
+
+stmt : stmt_incompleto { $$ = $1; }
+     | stmt_completo   { $$ = $1; }
+     ;
+
+stmt_completo : atribuicao { $$ = $1; }
+              | declaracao { $$ = $1; }
+              | comando_print { $$ = $1; }
+              | bloco { $$ = $1; }
+              | comando_do_while { $$ = $1; }
+              | comando_while_completo { $$ = $1; }
+              | TOK_IF '(' expr ')' stmt_completo TOK_ELSE stmt_completo {
+                    $$ = novo_syntaticno("IF", 3);
+                    $$->filhos[0] = $3;
+                    $$->filhos[1] = $5;
+                    $$->filhos[2] = $7;
+                }
+              ;
+
+
+stmt_incompleto : TOK_IF '(' expr ')' stmt {
+                      $$ = novo_syntaticno("IF", 2);
+                      $$->filhos[0] = $3;
+                      $$->filhos[1] = $5;
+                  }
+                | TOK_IF '(' expr ')' stmt_completo TOK_ELSE stmt_incompleto {
+                      $$ = novo_syntaticno("IF", 3);
+                      $$->filhos[0] = $3;
+                      $$->filhos[1] = $5;
+                      $$->filhos[2] = $7;
+                  }
+                ;
+
+bloco : '{' stmts '}' { $$ = $2; }
       ;
 
 
-stmt : declaracao {$$ = $1;}
-     | atribuicao {$$ = $1;}
-     | comando_print {$$ = $1;}
+comando_while_completo : TOK_WHILE '(' expr ')' stmt_completo {
+                            $$ = novo_syntaticno("WHILE", 2);
+                            $$->filhos[0] = $3;
+                            $$->filhos[1] = $5;
+                         }
+                       ;
+
+comando_do_while : TOK_DO stmt TOK_WHILE '(' expr ')' ';' {
+                       $$ = novo_syntaticno("DO_WHILE", 2);
+                       $$->filhos[0] = $2;
+                       $$->filhos[1] = $5;
+                   }
+                 ;
+
+expr : expr_ou { $$ = $1; }
      ;
 
+expr_ou : expr_ou TOK_OR expr_e   { 
+                    $$ = novo_syntaticno("||", 2); 
+                    $$->filhos[0] = $1; 
+                    $$->filhos[1] = $3; 
+                    }
+        | expr_e  { $$ = $1; }
+        ;
 
+
+expr_e : expr_e TOK_AND expr_igualdade { 
+                         $$ = novo_syntaticno("&&", 2); 
+                         $$->filhos[0] = $1; 
+                         $$->filhos[1] = $3; 
+                         }
+       | expr_igualdade  { $$ = $1; }
+       ;
+
+
+expr_igualdade : expr_igualdade TOK_EQ expr_relacional { 
+                                        $$ = novo_syntaticno("==", 2); 
+                                        $$->filhos[0] = $1; 
+                                        $$->filhos[1] = $3; 
+                                   }
+               | expr_igualdade TOK_NE expr_relacional { 
+                                        $$ = novo_syntaticno("!=", 2); 
+                                        $$->filhos[0] = $1; 
+                                        $$->filhos[1] = $3; 
+                                   }
+               | expr_relacional  { $$ = $1; }
+               ;
+
+
+expr_relacional : expr_arit '<' expr_arit    { 
+                              $$ = novo_syntaticno("<", 2);  
+                              $$->filhos[0] = $1; 
+                              $$->filhos[1] = $3; 
+                         }
+                | expr_arit '>' expr_arit    { 
+                              $$ = novo_syntaticno(">", 2);  
+                              $$->filhos[0] = $1; 
+                              $$->filhos[1] = $3; 
+                         }
+                | expr_arit TOK_LE expr_arit { 
+                              $$ = novo_syntaticno("<=", 2); 
+                              $$->filhos[0] = $1; 
+                              $$->filhos[1] = $3; 
+                         }
+                | expr_arit TOK_GE expr_arit { 
+                              $$ = novo_syntaticno(">=", 2); 
+                              $$->filhos[0] = $1; 
+                              $$->filhos[1] = $3; 
+                         }
+                | expr_arit  { $$ = $1; }
+                ;
+
+
+expr_arit : expr_arit '+' term { 
+                         $$ = novo_syntaticno("+", 2); 
+                         $$->filhos[0] = $1; 
+                         $$->filhos[1] = $3; 
+                    }
+          | expr_arit '-' term { $$ = novo_syntaticno("-", 2); 
+                         $$->filhos[0] = $1; 
+                         $$->filhos[1] = $3; 
+                    }
+          | term  { $$ = $1; }
+          ;
+
+term : term '*' unary { 
+               $$ = novo_syntaticno("*", 2); 
+               $$->filhos[0] = $1; 
+               $$->filhos[1] = $3; 
+          }
+     | term '/' unary { 
+               $$ = novo_syntaticno("/", 2); 
+               $$->filhos[0] = $1;
+               $$->filhos[1] = $3; 
+          }
+     | unary { $$ = $1; }
+     ;
+
+unary : '!' unary { 
+          $$ = novo_syntaticno("!", 1);  
+          $$->filhos[0] = $2; 
+     }
+      | factor  { $$ = $1; }
+      ;
+
+factor : '(' expr ')' { 
+               $$ = novo_syntaticno("()", 1); 
+               $$->filhos[0] = $2; 
+               }
+       | TOK_INT { 
+               $$ = novo_syntaticno("INT", 0);
+               $$->constvalue = $1;
+               }
+       | TOK_FLT {
+               $$ = novo_syntaticno("FLOAT", 0);
+               $$->constvalue = $1;
+               }
+       | TOK_IDENT { simbolo *s = simbolo_existe($1);
+                     if (!s) 
+                         s = simbolo_novo($1, TOK_IDENT);
+                     $$ = novo_syntaticno("IDENT", 0);
+                     $$->sim = s;
+                    }
+       ;
+
+                         /* DIFERENCIAL DA MINHA LINGUAGEM */
 /* ANOTAÇÃO: "let velocidade : m\s = 40;" Dessa forma a minha linguagem define a unidade de media da variavel*/
 /* OBJETIVO: Linguagem fazer o tratamento de operações considerando unidade de medida*/
 
@@ -120,17 +277,17 @@ comando_print : TOK_PRINT expr ';' {
                         }
               ;
 
-tipo_unidade : fator_unidade  {$$ = $1;}
-             | tipo_unidade '*' fator_unidade {
-                         $$ = novo_syntaticno("*", 2); 
-                         $$->filhos[0] = $1; 
-                         $$->filhos[1] = $3;
-                        }
-             | tipo_unidade '/' fator_unidade {
-                         $$ = novo_syntaticno("/", 2); 
-                         $$->filhos[0] = $1; 
-                         $$->filhos[1] = $3;
-                        }
+tipo_unidade : tipo_unidade '*' fator_unidade {
+                                   $$ = novo_syntaticno("*", 2); 
+                                   $$->filhos[0] = $1; 
+                                   $$->filhos[1] = $3;            
+                              }
+             | tipo_unidade '/' fator_unidade { 
+                                   $$ = novo_syntaticno("/", 2); 
+                                   $$->filhos[0] = $1; 
+                                   $$->filhos[1] = $3;                          
+                              }
+             | fator_unidade  { $$ = $1; }
              ;
 
 fator_unidade : TOK_IDENT { simbolo *s = simbolo_existe($1);
@@ -140,57 +297,10 @@ fator_unidade : TOK_IDENT { simbolo *s = simbolo_existe($1);
                      $$->sim = s;
                     }
               | '(' tipo_unidade ')' { 
-                         $$ = novo_syntaticno("()", 1); 
-                         $$->filhos[0] = $2; 
-                         }
-              ;
-
-
-expr : expr '+' term {
-               $$ = novo_syntaticno("+", 2); 
-               $$->filhos[0] = $1; 
-               $$->filhos[1] = $3;
-               }
-     | expr '-' term {
-               $$ = novo_syntaticno("-", 2); 
-               $$->filhos[0] = $1; 
-               $$->filhos[1] = $3;
-               }
-     | term {$$ = $1;}
-     ;
-
-term : term '*' factor {
-               $$ = novo_syntaticno("*", 2); 
-               $$->filhos[0] = $1; 
-               $$->filhos[1] = $3;
-               }
-     | term '/' factor {
-               $$ = novo_syntaticno("/", 2); 
-               $$->filhos[0] = $1; 
-               $$->filhos[1] = $3;
-               }
-     | factor       {$$ = $1;}
-     ;
-
-factor : '(' expr ')' { 
-               $$ = novo_syntaticno("()", 1); 
-               $$->filhos[0] = $2; 
-               }
-       | TOK_INT { 
-               $$ = novo_syntaticno("INT", 0);
-               $$->constvalue = $1;
-               }
-       | TOK_FLT {
-               $$ = novo_syntaticno("FLOAT", 0);
-               $$->constvalue = $1;
-               }
-       | TOK_IDENT { simbolo *s = simbolo_existe($1);
-                     if (!s) 
-                         s = simbolo_novo($1, TOK_IDENT);
-                     $$ = novo_syntaticno("IDENT", 0);
-                     $$->sim = s;
+                    $$ = novo_syntaticno("()", 1); 
+                    $$->filhos[0] = $2; 
                     }
-       ;
+              ;
 
 %%
 
@@ -261,6 +371,20 @@ void debug(syntaticno *no) {
 }
 
 
-int main() {
-     yyparse();
+int main(int argc, char *argv[]) {
+    
+    extern FILE *yyin;
+
+    if (argc > 1) {
+        yyin = fopen(argv[1], "r");
+
+        if (yyin == NULL) {
+            fprintf(stderr, "Erro na leitura do arquivo'%s'\n", argv[1]);
+            return 1;
+        }
+    }
+
+    yyparse();
+
+    return 0;
 }

@@ -58,7 +58,18 @@ extern int yydebug;
     TOK_INT = 259,                 /* TOK_INT  */
     TOK_FLT = 260,                 /* TOK_FLT  */
     TOK_IDENT = 261,               /* TOK_IDENT  */
-    TOK_LET = 262                  /* TOK_LET  */
+    TOK_LET = 262,                 /* TOK_LET  */
+    TOK_IF = 263,                  /* TOK_IF  */
+    TOK_ELSE = 264,                /* TOK_ELSE  */
+    TOK_WHILE = 265,               /* TOK_WHILE  */
+    TOK_FOR = 266,                 /* TOK_FOR  */
+    TOK_DO = 267,                  /* TOK_DO  */
+    TOK_EQ = 268,                  /* TOK_EQ  */
+    TOK_NE = 269,                  /* TOK_NE  */
+    TOK_LE = 270,                  /* TOK_LE  */
+    TOK_GE = 271,                  /* TOK_GE  */
+    TOK_AND = 272,                 /* TOK_AND  */
+    TOK_OR = 273                   /* TOK_OR  */
   };
   typedef enum yytokentype yytoken_kind_t;
 #endif
@@ -71,10 +82,10 @@ union YYSTYPE
 
     char *nome;
     int valor_int;
-    float valor_float;
+    double valor_float;
     struct syntaticno *no;
 
-#line 78 "AnalisadorLexico.tab.h"
+#line 89 "AnalisadorLexico.tab.h"
 
 };
 typedef union YYSTYPE YYSTYPE;
