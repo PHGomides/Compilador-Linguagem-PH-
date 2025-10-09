@@ -4,6 +4,9 @@
 #include <stdbool.h>
 #include <string.h>
 #include <stdlib.h>
+
+extern int yylineno;
+
 int yyerror(const char *s);
 int yylex(void);
 int errorc = 0;
@@ -42,13 +45,13 @@ void debug(syntaticno *root);
     struct syntaticno *no;
 }
 
-%token TOK_PRINT TOK_INT TOK_FLT TOK_IDENT
+%token TOK_PRINT TOK_INT TOK_FLT TOK_IDENT TOK_BOOL
 %token TOK_LET TOK_IF TOK_ELSE TOK_WHILE TOK_FOR TOK_DO
 %token TOK_EQ TOK_NE TOK_LE TOK_GE TOK_AND TOK_OR
 
 
 %type <nome> TOK_IDENT
-%type <valor_int> TOK_INT
+%type <valor_int> TOK_INT TOK_BOOL 
 %type <valor_float> TOK_FLT
 %type <no> program stmts declaracao atribuicao comando_print tipo_unidade fator_unidade
 %type <no> expr expr_ou expr_e expr_igualdade expr_relacional expr_arit term unary factor
@@ -98,7 +101,6 @@ stmt_completo : atribuicao { $$ = $1; }
                     $$->filhos[2] = $7;
                 }
               ;
-
 
 stmt_incompleto : TOK_IF '(' expr ')' stmt {
                       $$ = novo_syntaticno("IF", 2);
@@ -234,6 +236,10 @@ factor : '(' expr ')' {
                $$ = novo_syntaticno("FLOAT", 0);
                $$->constvalue = $1;
                }
+        | TOK_BOOL { 
+               $$ = novo_syntaticno("BOOL", 0);
+               $$->constvalue = $1;
+         }
        | TOK_IDENT { simbolo *s = simbolo_existe($1);
                      if (!s) 
                          s = simbolo_novo($1, TOK_IDENT);
@@ -310,7 +316,7 @@ int yywrap(void) {
 
 int yyerror(const char *s) {
      errorc++; 
-     printf("Erro: %d: %s\n", errorc, s);
+     fprintf(stderr, "Erro na linha %d: %s\n", yylineno, s);
     return 1;
 }
 
@@ -358,16 +364,16 @@ void print_tree(syntaticno *n) {
      for (int i = 0; i < n->qtdfilhos; i++) 
           printf("\tn%d -- n%d;\n", n->id, n->filhos[i]->id);
 }
-
+ 
 void debug(syntaticno *no) {
      printf("Símbolos:\n");
      for (int i = 0; i < simbolo_qtd; i++) {
          printf("Nome: %s, Token: %d\n", tabela_simbolos[i].nome, tabela_simbolos[i].token);
      }
-     printf("\nÁrvore Sintática Abstrata:\n");
-     printf("graph prog {\n");
-     print_tree(no);
-     printf("}\n");
+     //printf("\nÁrvore Sintática Abstrata:\n");
+     //printf("graph prog {\n");
+     //print_tree(no);
+     //printf("}\n");
 }
 
 

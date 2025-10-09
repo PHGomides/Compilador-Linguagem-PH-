@@ -1,0 +1,22 @@
+let gravidade: m/s = 9.8;
+let tempo: s = 0;
+let tempo_max: s = 10;
+let velocidade: m/s = 0;
+
+if(true){
+    print 1;
+}
+
+while (tempo < tempo_max) {
+    
+    
+    velocidade = velocidade + gravidade * 1.0;
+    tempo = tempo + 1;
+
+
+    if (velocidade > 30.0) {
+        print 1;
+    } else {
+        print 0;
+    }
+}

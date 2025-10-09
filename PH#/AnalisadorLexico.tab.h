@@ -58,18 +58,19 @@ extern int yydebug;
     TOK_INT = 259,                 /* TOK_INT  */
     TOK_FLT = 260,                 /* TOK_FLT  */
     TOK_IDENT = 261,               /* TOK_IDENT  */
-    TOK_LET = 262,                 /* TOK_LET  */
-    TOK_IF = 263,                  /* TOK_IF  */
-    TOK_ELSE = 264,                /* TOK_ELSE  */
-    TOK_WHILE = 265,               /* TOK_WHILE  */
-    TOK_FOR = 266,                 /* TOK_FOR  */
-    TOK_DO = 267,                  /* TOK_DO  */
-    TOK_EQ = 268,                  /* TOK_EQ  */
-    TOK_NE = 269,                  /* TOK_NE  */
-    TOK_LE = 270,                  /* TOK_LE  */
-    TOK_GE = 271,                  /* TOK_GE  */
-    TOK_AND = 272,                 /* TOK_AND  */
-    TOK_OR = 273                   /* TOK_OR  */
+    TOK_BOOL = 262,                /* TOK_BOOL  */
+    TOK_LET = 263,                 /* TOK_LET  */
+    TOK_IF = 264,                  /* TOK_IF  */
+    TOK_ELSE = 265,                /* TOK_ELSE  */
+    TOK_WHILE = 266,               /* TOK_WHILE  */
+    TOK_FOR = 267,                 /* TOK_FOR  */
+    TOK_DO = 268,                  /* TOK_DO  */
+    TOK_EQ = 269,                  /* TOK_EQ  */
+    TOK_NE = 270,                  /* TOK_NE  */
+    TOK_LE = 271,                  /* TOK_LE  */
+    TOK_GE = 272,                  /* TOK_GE  */
+    TOK_AND = 273,                 /* TOK_AND  */
+    TOK_OR = 274                   /* TOK_OR  */
   };
   typedef enum yytokentype yytoken_kind_t;
 #endif
@@ -78,14 +79,14 @@ extern int yydebug;
 #if ! defined YYSTYPE && ! defined YYSTYPE_IS_DECLARED
 union YYSTYPE
 {
-#line 38 "AnalisadorLexico.y"
+#line 41 "AnalisadorLexico.y"
 
     char *nome;
     int valor_int;
     double valor_float;
     struct syntaticno *no;
 
-#line 89 "AnalisadorLexico.tab.h"
+#line 90 "AnalisadorLexico.tab.h"
 
 };
 typedef union YYSTYPE YYSTYPE;

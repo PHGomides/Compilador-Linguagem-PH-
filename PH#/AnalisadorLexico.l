@@ -34,6 +34,8 @@
 "&&"            { return TOK_AND; }
 "||"            { return TOK_OR; }
 "!"             { return '!'; }
+"true"          { yylval.valor_int = 1; return TOK_BOOL; } 
+"false"         { yylval.valor_int = 0; return TOK_BOOL; } 
 [0-9]+\.[0-9]+  { 
     yylval.valor_float = atof(yytext);
     return TOK_FLT; 

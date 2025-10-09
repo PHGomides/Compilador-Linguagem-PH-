@@ -6,6 +6,11 @@ let tempo_maximo: s = 10;
 let alvo_posicao: m = 0;
 
 print 1;
+
+while(false){
+ print tempo;
+}
+
 while (tempo < tempo_maximo && posicao > alvo_posicao) {
     
     

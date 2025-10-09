@@ -1,0 +1,18 @@
+let contador: int = 5;
+let pronto bool = false; 
+
+
+do {
+    contador = contador - 1; 
+    
+    if (contador == 2 || pronto == true) {
+        print 99;
+    }
+
+} while (contador > 0);
+
+pronto = true;
+
+if (contador == 0 && pronto != false) {
+    print 100;
+}
