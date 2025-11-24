@@ -9,4 +9,4 @@ let distancia: m = 50;
 let velocidade: m/s = 20;
 velocidade = tempo; 
 
-print velocidade
+print velocidade;
