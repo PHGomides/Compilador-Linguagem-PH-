@@ -79,11 +79,11 @@ extern int yydebug;
 #if ! defined YYSTYPE && ! defined YYSTYPE_IS_DECLARED
 union YYSTYPE
 {
-#line 10 "AnalisadorLexico.y"
+#line 15 "AnalisadorLexico.y"
 
     char *nome;
     int valor_int;
-    float valor_float;
+    double valor_float;
     Node *node;
 
 #line 90 "AnalisadorLexico.tab.h"

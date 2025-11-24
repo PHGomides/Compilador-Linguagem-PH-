@@ -50,14 +50,17 @@ int errorcount = 0;
 [0-9]+\.[0-9]+  { yylval.valor_float = atof(yytext); return TOK_FLT; }
 [a-zA-Z_][a-zA-Z_0-9]* { yylval.nome = strdup(yytext); return TOK_IDENT; }
 
-. { printf("Caractere invalido: %c\n", yytext[0]); }
+. { 
+    
+    fprintf(stderr, "Erro Lexico na linha %d: Caractere invalido '%c'\n", yylineno, yytext[0]);
+    errorcount++;
+}
 %%
 
-// yywrap e main implementados aqui, dispensando o uso de -lfl
 int yywrap() { return 1; }
 
 int yyerror(const char *s) {
-    fprintf(stderr, "%d: %s\n", yylineno, s);
+    fprintf(stderr, "Erro de Sintaxe na linha %d: %s\n", yylineno, s);
     errorcount++;
     return 1;
 }
@@ -70,10 +73,25 @@ int main(int argc, char *argv[]) {
     build_file_name = argv[1];
     yyin = fopen(build_file_name, "r");
     if (yyin == NULL) {
-        fprintf(stderr, "Erro ao abrir arquivo %s.\n", build_file_name);
+        fprintf(stderr, "Erro fatal: Nao foi possivel abrir o arquivo %s.\n", build_file_name);
         return 1;
     }
+
+    printf("Iniciando compilacao de: %s\n", build_file_name);
+    
+    
     yyparse();
+
     if (yyin) fclose(yyin);
+
+    // Resumo final dos erros
+    printf("\n----------------------------------\n");
+    if (errorcount == 0) {
+        printf("SUCESSO: O codigo foi compilado sem erros.\n");
+    } else {
+        printf("FALHA: Encontrados %d erro(s) durante a compilacao.\n", errorcount);
+    }
+    printf("----------------------------------\n");
+
     return errorcount;
 }

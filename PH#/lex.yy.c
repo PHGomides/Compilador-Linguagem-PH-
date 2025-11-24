@@ -975,14 +975,18 @@ YY_RULE_SETUP
 case 34:
 YY_RULE_SETUP
 #line 53 "AnalisadorLexico.l"
-{ printf("Caractere invalido: %c\n", yytext[0]); }
+{ 
+    
+    fprintf(stderr, "Erro Lexico na linha %d: Caractere invalido '%c'\n", yylineno, yytext[0]);
+    errorcount++;
+}
 	YY_BREAK
 case 35:
 YY_RULE_SETUP
-#line 54 "AnalisadorLexico.l"
+#line 58 "AnalisadorLexico.l"
 ECHO;
 	YY_BREAK
-#line 985 "lex.yy.c"
+#line 989 "lex.yy.c"
 case YY_STATE_EOF(INITIAL):
 	yyterminate();
 
@@ -1999,14 +2003,13 @@ void yyfree (void * ptr )
 
 #define YYTABLES_NAME "yytables"
 
-#line 54 "AnalisadorLexico.l"
+#line 58 "AnalisadorLexico.l"
 
 
-// yywrap e main implementados aqui, dispensando o uso de -lfl
 int yywrap() { return 1; }
 
 int yyerror(const char *s) {
-    fprintf(stderr, "%d: %s\n", yylineno, s);
+    fprintf(stderr, "Erro de Sintaxe na linha %d: %s\n", yylineno, s);
     errorcount++;
     return 1;
 }
@@ -2019,10 +2022,25 @@ int main(int argc, char *argv[]) {
     build_file_name = argv[1];
     yyin = fopen(build_file_name, "r");
     if (yyin == NULL) {
-        fprintf(stderr, "Erro ao abrir arquivo %s.\n", build_file_name);
+        fprintf(stderr, "Erro fatal: Nao foi possivel abrir o arquivo %s.\n", build_file_name);
         return 1;
     }
+
+    printf("Iniciando compilacao de: %s\n", build_file_name);
+    
+    
     yyparse();
+
     if (yyin) fclose(yyin);
+
+    // Resumo final dos erros
+    printf("\n----------------------------------\n");
+    if (errorcount == 0) {
+        printf("SUCESSO: O codigo foi compilado sem erros.\n");
+    } else {
+        printf("FALHA: Encontrados %d erro(s) durante a compilacao.\n", errorcount);
+    }
+    printf("----------------------------------\n");
+
     return errorcount;
 }

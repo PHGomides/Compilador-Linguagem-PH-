@@ -69,12 +69,17 @@
 /* First part of user prologue.  */
 #line 1 "AnalisadorLexico.y"
 
+#include <stdio.h>
+#include <stdlib.h>
+#include <string>
+#include <iostream>
 #include "node.h"
+
 int yylex(void);
 int yyerror(const char *s);
 extern int errorcount;
 
-#line 78 "AnalisadorLexico.tab.c"
+#line 83 "AnalisadorLexico.tab.c"
 
 # ifndef YY_CAST
 #  ifdef __cplusplus
@@ -544,14 +549,14 @@ static const yytype_int8 yytranslate[] =
 
 #if YYDEBUG
 /* YYRLINE[YYN] -- Source line where rule number YYN was defined.  */
-static const yytype_uint8 yyrline[] =
+static const yytype_int8 yyrline[] =
 {
-       0,    34,    34,    43,    46,    52,    53,    56,    57,    58,
-      59,    60,    61,    62,    67,    70,    75,    78,    83,    88,
-      90,    91,    94,    95,    98,    99,   100,   103,   104,   105,
-     106,   107,   110,   111,   112,   115,   116,   117,   120,   121,
-     124,   125,   126,   127,   128,   131,   136,   139,   142,   143,
-     144,   147,   148
+       0,    39,    39,    49,    52,    58,    59,    62,    63,    64,
+      65,    66,    67,    68,    71,    72,    75,    77,    79,    81,
+      82,    82,    83,    83,    84,    85,    86,    88,    89,    90,
+      91,    92,    94,    95,    96,    98,    99,   100,   102,   102,
+     104,   105,   106,   107,   108,   110,   112,   114,   116,   117,
+     118,   120,   120
 };
 #endif
 
@@ -1450,335 +1455,325 @@ yyreduce:
   switch (yyn)
     {
   case 2: /* program: stmts  */
-#line 34 "AnalisadorLexico.y"
+#line 39 "AnalisadorLexico.y"
                 { 
     if (errorcount == 0) {
         Program pg((yyvsp[0].node));
         pg.printAst();
+        SemanticChecker sc;
+        sc.check(&pg);
     }
 }
-#line 1461 "AnalisadorLexico.tab.c"
+#line 1468 "AnalisadorLexico.tab.c"
     break;
 
   case 3: /* stmts: stmt  */
-#line 43 "AnalisadorLexico.y"
+#line 49 "AnalisadorLexico.y"
              { 
           (yyval.node) = new Stmts((yyvsp[0].node)); 
       }
-#line 1469 "AnalisadorLexico.tab.c"
+#line 1476 "AnalisadorLexico.tab.c"
     break;
 
   case 4: /* stmts: stmts stmt  */
-#line 46 "AnalisadorLexico.y"
+#line 52 "AnalisadorLexico.y"
                    { 
           (yyvsp[-1].node)->append((yyvsp[0].node)); 
           (yyval.node) = (yyvsp[-1].node); 
       }
-#line 1478 "AnalisadorLexico.tab.c"
+#line 1485 "AnalisadorLexico.tab.c"
     break;
 
   case 5: /* stmt: stmt_incompleto  */
-#line 52 "AnalisadorLexico.y"
+#line 58 "AnalisadorLexico.y"
                        { (yyval.node) = (yyvsp[0].node); }
-#line 1484 "AnalisadorLexico.tab.c"
+#line 1491 "AnalisadorLexico.tab.c"
     break;
 
   case 6: /* stmt: stmt_completo  */
-#line 53 "AnalisadorLexico.y"
+#line 59 "AnalisadorLexico.y"
                        { (yyval.node) = (yyvsp[0].node); }
-#line 1490 "AnalisadorLexico.tab.c"
+#line 1497 "AnalisadorLexico.tab.c"
     break;
 
   case 7: /* stmt_completo: atribuicao  */
-#line 56 "AnalisadorLexico.y"
+#line 62 "AnalisadorLexico.y"
                            { (yyval.node) = (yyvsp[0].node); }
-#line 1496 "AnalisadorLexico.tab.c"
+#line 1503 "AnalisadorLexico.tab.c"
     break;
 
   case 8: /* stmt_completo: declaracao  */
-#line 57 "AnalisadorLexico.y"
+#line 63 "AnalisadorLexico.y"
                            { (yyval.node) = (yyvsp[0].node); }
-#line 1502 "AnalisadorLexico.tab.c"
+#line 1509 "AnalisadorLexico.tab.c"
     break;
 
   case 9: /* stmt_completo: comando_print  */
-#line 58 "AnalisadorLexico.y"
+#line 64 "AnalisadorLexico.y"
                               { (yyval.node) = (yyvsp[0].node); }
-#line 1508 "AnalisadorLexico.tab.c"
+#line 1515 "AnalisadorLexico.tab.c"
     break;
 
   case 10: /* stmt_completo: bloco  */
-#line 59 "AnalisadorLexico.y"
+#line 65 "AnalisadorLexico.y"
                       { (yyval.node) = (yyvsp[0].node); }
-#line 1514 "AnalisadorLexico.tab.c"
+#line 1521 "AnalisadorLexico.tab.c"
     break;
 
   case 11: /* stmt_completo: comando_do_while  */
-#line 60 "AnalisadorLexico.y"
+#line 66 "AnalisadorLexico.y"
                                  { (yyval.node) = (yyvsp[0].node); }
-#line 1520 "AnalisadorLexico.tab.c"
+#line 1527 "AnalisadorLexico.tab.c"
     break;
 
   case 12: /* stmt_completo: comando_while_completo  */
-#line 61 "AnalisadorLexico.y"
+#line 67 "AnalisadorLexico.y"
                                        { (yyval.node) = (yyvsp[0].node); }
-#line 1526 "AnalisadorLexico.tab.c"
+#line 1533 "AnalisadorLexico.tab.c"
     break;
 
   case 13: /* stmt_completo: TOK_IF '(' expr ')' stmt_completo TOK_ELSE stmt_completo  */
-#line 62 "AnalisadorLexico.y"
-                                                                         {
-                    (yyval.node) = new IfElse((yyvsp[-4].node), (yyvsp[-2].node), (yyvsp[0].node));
-                }
-#line 1534 "AnalisadorLexico.tab.c"
+#line 68 "AnalisadorLexico.y"
+                                                                         { (yyval.node) = new IfElse((yyvsp[-4].node), (yyvsp[-2].node), (yyvsp[0].node)); }
+#line 1539 "AnalisadorLexico.tab.c"
     break;
 
   case 14: /* stmt_incompleto: TOK_IF '(' expr ')' stmt  */
-#line 67 "AnalisadorLexico.y"
-                                           {
-                      (yyval.node) = new IfElse((yyvsp[-2].node), (yyvsp[0].node));
-                  }
-#line 1542 "AnalisadorLexico.tab.c"
+#line 71 "AnalisadorLexico.y"
+                                           { (yyval.node) = new IfElse((yyvsp[-2].node), (yyvsp[0].node)); }
+#line 1545 "AnalisadorLexico.tab.c"
     break;
 
   case 15: /* stmt_incompleto: TOK_IF '(' expr ')' stmt_completo TOK_ELSE stmt_incompleto  */
-#line 70 "AnalisadorLexico.y"
-                                                                             {
-                      (yyval.node) = new IfElse((yyvsp[-4].node), (yyvsp[-2].node), (yyvsp[0].node));
-                  }
-#line 1550 "AnalisadorLexico.tab.c"
+#line 72 "AnalisadorLexico.y"
+                                                                             { (yyval.node) = new IfElse((yyvsp[-4].node), (yyvsp[-2].node), (yyvsp[0].node)); }
+#line 1551 "AnalisadorLexico.tab.c"
     break;
 
   case 16: /* bloco: '{' stmts '}'  */
 #line 75 "AnalisadorLexico.y"
                       { (yyval.node) = new Block((yyvsp[-1].node)); }
-#line 1556 "AnalisadorLexico.tab.c"
+#line 1557 "AnalisadorLexico.tab.c"
     break;
 
   case 17: /* comando_while_completo: TOK_WHILE '(' expr ')' stmt_completo  */
-#line 78 "AnalisadorLexico.y"
-                                                              {
-                            (yyval.node) = new While((yyvsp[-2].node), (yyvsp[0].node));
-                         }
-#line 1564 "AnalisadorLexico.tab.c"
+#line 77 "AnalisadorLexico.y"
+                                                              { (yyval.node) = new While((yyvsp[-2].node), (yyvsp[0].node)); }
+#line 1563 "AnalisadorLexico.tab.c"
     break;
 
   case 18: /* comando_do_while: TOK_DO stmt TOK_WHILE '(' expr ')' ';'  */
-#line 83 "AnalisadorLexico.y"
-                                                          {
-                       (yyval.node) = new DoWhile((yyvsp[-5].node), (yyvsp[-2].node));
-                   }
-#line 1572 "AnalisadorLexico.tab.c"
+#line 79 "AnalisadorLexico.y"
+                                                          { (yyval.node) = new DoWhile((yyvsp[-5].node), (yyvsp[-2].node)); }
+#line 1569 "AnalisadorLexico.tab.c"
     break;
 
   case 19: /* expr: expr_ou  */
-#line 88 "AnalisadorLexico.y"
+#line 81 "AnalisadorLexico.y"
                { (yyval.node) = (yyvsp[0].node); }
-#line 1578 "AnalisadorLexico.tab.c"
+#line 1575 "AnalisadorLexico.tab.c"
     break;
 
   case 20: /* expr_ou: expr_ou TOK_OR expr_e  */
-#line 90 "AnalisadorLexico.y"
+#line 82 "AnalisadorLexico.y"
                                 { (yyval.node) = new BinaryOp((yyvsp[-2].node), "||", (yyvsp[0].node)); }
-#line 1584 "AnalisadorLexico.tab.c"
+#line 1581 "AnalisadorLexico.tab.c"
     break;
 
   case 21: /* expr_ou: expr_e  */
-#line 91 "AnalisadorLexico.y"
-                 { (yyval.node) = (yyvsp[0].node); }
-#line 1590 "AnalisadorLexico.tab.c"
+#line 82 "AnalisadorLexico.y"
+                                                                              { (yyval.node) = (yyvsp[0].node); }
+#line 1587 "AnalisadorLexico.tab.c"
     break;
 
   case 22: /* expr_e: expr_e TOK_AND expr_igualdade  */
-#line 94 "AnalisadorLexico.y"
+#line 83 "AnalisadorLexico.y"
                                        { (yyval.node) = new BinaryOp((yyvsp[-2].node), "&&", (yyvsp[0].node)); }
-#line 1596 "AnalisadorLexico.tab.c"
+#line 1593 "AnalisadorLexico.tab.c"
     break;
 
   case 23: /* expr_e: expr_igualdade  */
-#line 95 "AnalisadorLexico.y"
-                        { (yyval.node) = (yyvsp[0].node); }
-#line 1602 "AnalisadorLexico.tab.c"
+#line 83 "AnalisadorLexico.y"
+                                                                                             { (yyval.node) = (yyvsp[0].node); }
+#line 1599 "AnalisadorLexico.tab.c"
     break;
 
   case 24: /* expr_igualdade: expr_igualdade TOK_EQ expr_relacional  */
-#line 98 "AnalisadorLexico.y"
+#line 84 "AnalisadorLexico.y"
                                                        { (yyval.node) = new BinaryOp((yyvsp[-2].node), "==", (yyvsp[0].node)); }
-#line 1608 "AnalisadorLexico.tab.c"
+#line 1605 "AnalisadorLexico.tab.c"
     break;
 
   case 25: /* expr_igualdade: expr_igualdade TOK_NE expr_relacional  */
-#line 99 "AnalisadorLexico.y"
+#line 85 "AnalisadorLexico.y"
                                                        { (yyval.node) = new BinaryOp((yyvsp[-2].node), "!=", (yyvsp[0].node)); }
-#line 1614 "AnalisadorLexico.tab.c"
+#line 1611 "AnalisadorLexico.tab.c"
     break;
 
   case 26: /* expr_igualdade: expr_relacional  */
-#line 100 "AnalisadorLexico.y"
+#line 86 "AnalisadorLexico.y"
                                  { (yyval.node) = (yyvsp[0].node); }
-#line 1620 "AnalisadorLexico.tab.c"
+#line 1617 "AnalisadorLexico.tab.c"
     break;
 
   case 27: /* expr_relacional: expr_arit '<' expr_arit  */
-#line 103 "AnalisadorLexico.y"
+#line 88 "AnalisadorLexico.y"
                                           { (yyval.node) = new BinaryOp((yyvsp[-2].node), "<", (yyvsp[0].node)); }
-#line 1626 "AnalisadorLexico.tab.c"
+#line 1623 "AnalisadorLexico.tab.c"
     break;
 
   case 28: /* expr_relacional: expr_arit '>' expr_arit  */
-#line 104 "AnalisadorLexico.y"
+#line 89 "AnalisadorLexico.y"
                                           { (yyval.node) = new BinaryOp((yyvsp[-2].node), ">", (yyvsp[0].node)); }
-#line 1632 "AnalisadorLexico.tab.c"
+#line 1629 "AnalisadorLexico.tab.c"
     break;
 
   case 29: /* expr_relacional: expr_arit TOK_LE expr_arit  */
-#line 105 "AnalisadorLexico.y"
+#line 90 "AnalisadorLexico.y"
                                              { (yyval.node) = new BinaryOp((yyvsp[-2].node), "<=", (yyvsp[0].node)); }
-#line 1638 "AnalisadorLexico.tab.c"
+#line 1635 "AnalisadorLexico.tab.c"
     break;
 
   case 30: /* expr_relacional: expr_arit TOK_GE expr_arit  */
-#line 106 "AnalisadorLexico.y"
+#line 91 "AnalisadorLexico.y"
                                              { (yyval.node) = new BinaryOp((yyvsp[-2].node), ">=", (yyvsp[0].node)); }
-#line 1644 "AnalisadorLexico.tab.c"
+#line 1641 "AnalisadorLexico.tab.c"
     break;
 
   case 31: /* expr_relacional: expr_arit  */
-#line 107 "AnalisadorLexico.y"
+#line 92 "AnalisadorLexico.y"
                             { (yyval.node) = (yyvsp[0].node); }
-#line 1650 "AnalisadorLexico.tab.c"
+#line 1647 "AnalisadorLexico.tab.c"
     break;
 
   case 32: /* expr_arit: expr_arit '+' term  */
-#line 110 "AnalisadorLexico.y"
+#line 94 "AnalisadorLexico.y"
                                { (yyval.node) = new BinaryOp((yyvsp[-2].node), "+", (yyvsp[0].node)); }
-#line 1656 "AnalisadorLexico.tab.c"
+#line 1653 "AnalisadorLexico.tab.c"
     break;
 
   case 33: /* expr_arit: expr_arit '-' term  */
-#line 111 "AnalisadorLexico.y"
+#line 95 "AnalisadorLexico.y"
                                { (yyval.node) = new BinaryOp((yyvsp[-2].node), "-", (yyvsp[0].node)); }
-#line 1662 "AnalisadorLexico.tab.c"
+#line 1659 "AnalisadorLexico.tab.c"
     break;
 
   case 34: /* expr_arit: term  */
-#line 112 "AnalisadorLexico.y"
+#line 96 "AnalisadorLexico.y"
                  { (yyval.node) = (yyvsp[0].node); }
-#line 1668 "AnalisadorLexico.tab.c"
+#line 1665 "AnalisadorLexico.tab.c"
     break;
 
   case 35: /* term: term '*' unary  */
-#line 115 "AnalisadorLexico.y"
+#line 98 "AnalisadorLexico.y"
                       { (yyval.node) = new BinaryOp((yyvsp[-2].node), "*", (yyvsp[0].node)); }
-#line 1674 "AnalisadorLexico.tab.c"
+#line 1671 "AnalisadorLexico.tab.c"
     break;
 
   case 36: /* term: term '/' unary  */
-#line 116 "AnalisadorLexico.y"
+#line 99 "AnalisadorLexico.y"
                       { (yyval.node) = new BinaryOp((yyvsp[-2].node), "/", (yyvsp[0].node)); }
-#line 1680 "AnalisadorLexico.tab.c"
+#line 1677 "AnalisadorLexico.tab.c"
     break;
 
   case 37: /* term: unary  */
-#line 117 "AnalisadorLexico.y"
+#line 100 "AnalisadorLexico.y"
              { (yyval.node) = (yyvsp[0].node); }
-#line 1686 "AnalisadorLexico.tab.c"
+#line 1683 "AnalisadorLexico.tab.c"
     break;
 
   case 38: /* unary: '!' unary  */
-#line 120 "AnalisadorLexico.y"
+#line 102 "AnalisadorLexico.y"
                   { (yyval.node) = new UnaryOp("!", (yyvsp[0].node)); }
-#line 1692 "AnalisadorLexico.tab.c"
+#line 1689 "AnalisadorLexico.tab.c"
     break;
 
   case 39: /* unary: factor  */
-#line 121 "AnalisadorLexico.y"
-               { (yyval.node) = (yyvsp[0].node); }
-#line 1698 "AnalisadorLexico.tab.c"
+#line 102 "AnalisadorLexico.y"
+                                                          { (yyval.node) = (yyvsp[0].node); }
+#line 1695 "AnalisadorLexico.tab.c"
     break;
 
   case 40: /* factor: '(' expr ')'  */
-#line 124 "AnalisadorLexico.y"
+#line 104 "AnalisadorLexico.y"
                       { (yyval.node) = (yyvsp[-1].node); }
-#line 1704 "AnalisadorLexico.tab.c"
+#line 1701 "AnalisadorLexico.tab.c"
     break;
 
   case 41: /* factor: TOK_INT  */
-#line 125 "AnalisadorLexico.y"
+#line 105 "AnalisadorLexico.y"
                  { (yyval.node) = new ConstInteger((yyvsp[0].valor_int)); }
-#line 1710 "AnalisadorLexico.tab.c"
+#line 1707 "AnalisadorLexico.tab.c"
     break;
 
   case 42: /* factor: TOK_FLT  */
-#line 126 "AnalisadorLexico.y"
+#line 106 "AnalisadorLexico.y"
                  { (yyval.node) = new ConstDouble((yyvsp[0].valor_float)); }
-#line 1716 "AnalisadorLexico.tab.c"
+#line 1713 "AnalisadorLexico.tab.c"
     break;
 
   case 43: /* factor: TOK_BOOL  */
-#line 127 "AnalisadorLexico.y"
+#line 107 "AnalisadorLexico.y"
                   { (yyval.node) = new ConstBool((yyvsp[0].valor_int)); }
-#line 1722 "AnalisadorLexico.tab.c"
+#line 1719 "AnalisadorLexico.tab.c"
     break;
 
   case 44: /* factor: TOK_IDENT  */
-#line 128 "AnalisadorLexico.y"
+#line 108 "AnalisadorLexico.y"
                    { (yyval.node) = new Load((yyvsp[0].nome)); }
-#line 1728 "AnalisadorLexico.tab.c"
+#line 1725 "AnalisadorLexico.tab.c"
     break;
 
   case 45: /* declaracao: TOK_LET TOK_IDENT ':' tipo_unidade '=' expr ';'  */
-#line 131 "AnalisadorLexico.y"
-                                                             {
-                 (yyval.node) = new Let((yyvsp[-5].nome), (yyvsp[-3].node), (yyvsp[-1].node));
-           }
-#line 1736 "AnalisadorLexico.tab.c"
+#line 110 "AnalisadorLexico.y"
+                                                             { (yyval.node) = new Let((yyvsp[-5].nome), (yyvsp[-3].node), (yyvsp[-1].node)); }
+#line 1731 "AnalisadorLexico.tab.c"
     break;
 
   case 46: /* atribuicao: TOK_IDENT '=' expr ';'  */
-#line 136 "AnalisadorLexico.y"
+#line 112 "AnalisadorLexico.y"
                                     { (yyval.node) = new Store((yyvsp[-3].nome), (yyvsp[-1].node)); }
-#line 1742 "AnalisadorLexico.tab.c"
+#line 1737 "AnalisadorLexico.tab.c"
     break;
 
   case 47: /* comando_print: TOK_PRINT expr ';'  */
-#line 139 "AnalisadorLexico.y"
+#line 114 "AnalisadorLexico.y"
                                    { (yyval.node) = new Print((yyvsp[-1].node)); }
-#line 1748 "AnalisadorLexico.tab.c"
+#line 1743 "AnalisadorLexico.tab.c"
     break;
 
   case 48: /* tipo_unidade: tipo_unidade '*' fator_unidade  */
-#line 142 "AnalisadorLexico.y"
+#line 116 "AnalisadorLexico.y"
                                               { (yyval.node) = new BinaryOp((yyvsp[-2].node), "*", (yyvsp[0].node)); }
-#line 1754 "AnalisadorLexico.tab.c"
+#line 1749 "AnalisadorLexico.tab.c"
     break;
 
   case 49: /* tipo_unidade: tipo_unidade '/' fator_unidade  */
-#line 143 "AnalisadorLexico.y"
+#line 117 "AnalisadorLexico.y"
                                               { (yyval.node) = new BinaryOp((yyvsp[-2].node), "/", (yyvsp[0].node)); }
-#line 1760 "AnalisadorLexico.tab.c"
+#line 1755 "AnalisadorLexico.tab.c"
     break;
 
   case 50: /* tipo_unidade: fator_unidade  */
-#line 144 "AnalisadorLexico.y"
+#line 118 "AnalisadorLexico.y"
                              { (yyval.node) = (yyvsp[0].node); }
-#line 1766 "AnalisadorLexico.tab.c"
+#line 1761 "AnalisadorLexico.tab.c"
     break;
 
   case 51: /* fator_unidade: TOK_IDENT  */
-#line 147 "AnalisadorLexico.y"
+#line 120 "AnalisadorLexico.y"
                           { (yyval.node) = new Load((yyvsp[0].nome)); }
-#line 1772 "AnalisadorLexico.tab.c"
+#line 1767 "AnalisadorLexico.tab.c"
     break;
 
   case 52: /* fator_unidade: '(' tipo_unidade ')'  */
-#line 148 "AnalisadorLexico.y"
-                                     { (yyval.node) = (yyvsp[-1].node); }
-#line 1778 "AnalisadorLexico.tab.c"
+#line 120 "AnalisadorLexico.y"
+                                                                        { (yyval.node) = (yyvsp[-1].node); }
+#line 1773 "AnalisadorLexico.tab.c"
     break;
 
 
-#line 1782 "AnalisadorLexico.tab.c"
+#line 1777 "AnalisadorLexico.tab.c"
 
       default: break;
     }
@@ -2002,4 +1997,4 @@ yyreturnlab:
   return yyresult;
 }
 
-#line 151 "AnalisadorLexico.y"
+#line 122 "AnalisadorLexico.y"
