@@ -382,11 +382,11 @@ struct yy_trans_info
 static const flex_int16_t yy_accept[68] =
     {   0,
         0,    0,   36,   34,    1,    1,   28,   34,   14,   15,
-       11,    9,   10,   12,   31,   13,   18,   22,   19,   23,
+       11,    9,   10,   12,   32,   13,   18,   22,   19,   23,
        33,   33,   33,   33,   33,   33,   33,   33,   33,   16,
-       34,   17,   21,   26,    0,   31,   24,   20,   25,   33,
+       34,   17,   21,   26,    0,   32,   24,   20,   25,   33,
         8,   33,   33,   33,    4,   33,   33,   33,   33,   27,
-       32,   33,   33,    7,    3,   33,   33,   33,    5,   33,
+       31,   33,   33,    7,    3,   33,   33,   33,    5,   33,
        33,   29,   33,   30,    2,    6,    0
     } ;
 
@@ -509,18 +509,9 @@ char *yytext;
 #line 1 "AnalisadorLexico.l"
 #line 2 "AnalisadorLexico.l"
 #include <stdio.h>
-#include <string.h>
-#include <stdlib.h>
-#include <iostream>
-#include "node.h"
 #include "AnalisadorLexico.tab.h"
-
-int yyerror(const char *s);
-
-char *build_file_name;
-int errorcount = 0;
-#line 522 "lex.yy.c"
-#line 523 "lex.yy.c"
+#line 513 "lex.yy.c"
+#line 514 "lex.yy.c"
 
 #define INITIAL 0
 
@@ -737,9 +728,9 @@ YY_DECL
 		}
 
 	{
-#line 17 "AnalisadorLexico.l"
+#line 8 "AnalisadorLexico.l"
 
-#line 742 "lex.yy.c"
+#line 733 "lex.yy.c"
 
 	while ( /*CONSTCOND*/1 )		/* loops until end-of-file is reached */
 		{
@@ -809,177 +800,186 @@ do_action:	/* This label is used only to access EOF actions. */
 case 1:
 /* rule 1 can match eol */
 YY_RULE_SETUP
-#line 18 "AnalisadorLexico.l"
+#line 9 "AnalisadorLexico.l"
 { }
 	YY_BREAK
 case 2:
 YY_RULE_SETUP
-#line 19 "AnalisadorLexico.l"
+#line 10 "AnalisadorLexico.l"
 { return TOK_PRINT; }
 	YY_BREAK
 case 3:
 YY_RULE_SETUP
-#line 20 "AnalisadorLexico.l"
+#line 11 "AnalisadorLexico.l"
 { return TOK_LET; }
 	YY_BREAK
 case 4:
 YY_RULE_SETUP
-#line 21 "AnalisadorLexico.l"
+#line 12 "AnalisadorLexico.l"
 { return TOK_IF; }  
 	YY_BREAK
 case 5:
 YY_RULE_SETUP
-#line 22 "AnalisadorLexico.l"
+#line 13 "AnalisadorLexico.l"
 { return TOK_ELSE; }
 	YY_BREAK
 case 6:
 YY_RULE_SETUP
-#line 23 "AnalisadorLexico.l"
+#line 14 "AnalisadorLexico.l"
 { return TOK_WHILE; }
 	YY_BREAK
 case 7:
 YY_RULE_SETUP
-#line 24 "AnalisadorLexico.l"
+#line 15 "AnalisadorLexico.l"
 { return TOK_FOR; }
 	YY_BREAK
 case 8:
 YY_RULE_SETUP
-#line 25 "AnalisadorLexico.l"
+#line 16 "AnalisadorLexico.l"
 { return TOK_DO; } 
 	YY_BREAK
 case 9:
 YY_RULE_SETUP
-#line 26 "AnalisadorLexico.l"
+#line 17 "AnalisadorLexico.l"
 { return '+'; }
 	YY_BREAK
 case 10:
 YY_RULE_SETUP
-#line 27 "AnalisadorLexico.l"
+#line 18 "AnalisadorLexico.l"
 { return '-'; }
 	YY_BREAK
 case 11:
 YY_RULE_SETUP
-#line 28 "AnalisadorLexico.l"
+#line 19 "AnalisadorLexico.l"
 { return '*'; }
 	YY_BREAK
 case 12:
 YY_RULE_SETUP
-#line 29 "AnalisadorLexico.l"
+#line 20 "AnalisadorLexico.l"
 { return '/'; }
 	YY_BREAK
 case 13:
 YY_RULE_SETUP
-#line 30 "AnalisadorLexico.l"
+#line 21 "AnalisadorLexico.l"
 { return ':'; }
 	YY_BREAK
 case 14:
 YY_RULE_SETUP
-#line 31 "AnalisadorLexico.l"
+#line 22 "AnalisadorLexico.l"
 { return '('; }
 	YY_BREAK
 case 15:
 YY_RULE_SETUP
-#line 32 "AnalisadorLexico.l"
+#line 23 "AnalisadorLexico.l"
 { return ')'; }
 	YY_BREAK
 case 16:
 YY_RULE_SETUP
-#line 33 "AnalisadorLexico.l"
+#line 24 "AnalisadorLexico.l"
 { return '{'; }
 	YY_BREAK
 case 17:
 YY_RULE_SETUP
-#line 34 "AnalisadorLexico.l"
+#line 25 "AnalisadorLexico.l"
 { return '}'; }
 	YY_BREAK
 case 18:
 YY_RULE_SETUP
-#line 35 "AnalisadorLexico.l"
+#line 26 "AnalisadorLexico.l"
 { return ';'; }
 	YY_BREAK
 case 19:
 YY_RULE_SETUP
-#line 36 "AnalisadorLexico.l"
+#line 27 "AnalisadorLexico.l"
 { return '='; }
 	YY_BREAK
 case 20:
 YY_RULE_SETUP
-#line 37 "AnalisadorLexico.l"
+#line 28 "AnalisadorLexico.l"
 { return TOK_EQ; }
 	YY_BREAK
 case 21:
 YY_RULE_SETUP
-#line 38 "AnalisadorLexico.l"
+#line 29 "AnalisadorLexico.l"
 { return TOK_NE; }
 	YY_BREAK
 case 22:
 YY_RULE_SETUP
-#line 39 "AnalisadorLexico.l"
+#line 30 "AnalisadorLexico.l"
 { return '<'; }
 	YY_BREAK
 case 23:
 YY_RULE_SETUP
-#line 40 "AnalisadorLexico.l"
+#line 31 "AnalisadorLexico.l"
 { return '>'; }
 	YY_BREAK
 case 24:
 YY_RULE_SETUP
-#line 41 "AnalisadorLexico.l"
+#line 32 "AnalisadorLexico.l"
 { return TOK_LE; }
 	YY_BREAK
 case 25:
 YY_RULE_SETUP
-#line 42 "AnalisadorLexico.l"
+#line 33 "AnalisadorLexico.l"
 { return TOK_GE; }
 	YY_BREAK
 case 26:
 YY_RULE_SETUP
-#line 43 "AnalisadorLexico.l"
+#line 34 "AnalisadorLexico.l"
 { return TOK_AND; }
 	YY_BREAK
 case 27:
 YY_RULE_SETUP
-#line 44 "AnalisadorLexico.l"
+#line 35 "AnalisadorLexico.l"
 { return TOK_OR; }
 	YY_BREAK
 case 28:
 YY_RULE_SETUP
-#line 45 "AnalisadorLexico.l"
+#line 36 "AnalisadorLexico.l"
 { return '!'; }
 	YY_BREAK
 case 29:
 YY_RULE_SETUP
-#line 46 "AnalisadorLexico.l"
+#line 37 "AnalisadorLexico.l"
 { yylval.valor_int = 1; return TOK_BOOL; } 
 	YY_BREAK
 case 30:
 YY_RULE_SETUP
-#line 47 "AnalisadorLexico.l"
+#line 38 "AnalisadorLexico.l"
 { yylval.valor_int = 0; return TOK_BOOL; } 
 	YY_BREAK
 case 31:
 YY_RULE_SETUP
-#line 49 "AnalisadorLexico.l"
-{ yylval.valor_int = atoi(yytext); return TOK_INT; }
+#line 39 "AnalisadorLexico.l"
+{ 
+    yylval.valor_float = atof(yytext);
+    return TOK_FLT; 
+}
 	YY_BREAK
 case 32:
 YY_RULE_SETUP
-#line 50 "AnalisadorLexico.l"
-{ yylval.valor_float = atof(yytext); return TOK_FLT; }
+#line 43 "AnalisadorLexico.l"
+{ 
+    yylval.valor_int = atoi(yytext);
+    return TOK_INT; 
+}
 	YY_BREAK
 case 33:
 YY_RULE_SETUP
-#line 51 "AnalisadorLexico.l"
-{ yylval.nome = strdup(yytext); return TOK_IDENT; }
+#line 47 "AnalisadorLexico.l"
+{ 
+    yylval.nome = strdup(yytext);
+    return TOK_IDENT; 
+}
 	YY_BREAK
 case 34:
 YY_RULE_SETUP
-#line 53 "AnalisadorLexico.l"
-{ printf("Caractere invalido: %c\n", yytext[0]); }
+#line 52 "AnalisadorLexico.l"
+{ printf("Caractere não presente no alfabeto %c\n", yytext[0] ); }
 	YY_BREAK
 case 35:
 YY_RULE_SETUP
-#line 54 "AnalisadorLexico.l"
+#line 53 "AnalisadorLexico.l"
 ECHO;
 	YY_BREAK
 #line 985 "lex.yy.c"
@@ -1999,30 +1999,5 @@ void yyfree (void * ptr )
 
 #define YYTABLES_NAME "yytables"
 
-#line 54 "AnalisadorLexico.l"
+#line 53 "AnalisadorLexico.l"
 
-
-// yywrap e main implementados aqui, dispensando o uso de -lfl
-int yywrap() { return 1; }
-
-int yyerror(const char *s) {
-    fprintf(stderr, "%d: %s\n", yylineno, s);
-    errorcount++;
-    return 1;
-}
-
-int main(int argc, char *argv[]) {
-    if (argc <= 1) {
-        fprintf(stderr, "Uso: %s arquivo_fonte\n", argv[0]);
-        return 1;
-    }
-    build_file_name = argv[1];
-    yyin = fopen(build_file_name, "r");
-    if (yyin == NULL) {
-        fprintf(stderr, "Erro ao abrir arquivo %s.\n", build_file_name);
-        return 1;
-    }
-    yyparse();
-    if (yyin) fclose(yyin);
-    return errorcount;
-}

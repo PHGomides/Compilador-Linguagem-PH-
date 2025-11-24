@@ -1,10 +1,8 @@
 all:
 	flex AnalisadorLexico.l
 	bison -d AnalisadorLexico.y
-	gcc AnalisadorLexico.tab.c lex.yy.c -o cmp
+	clang++ -std=c++20 -g -O1 *.c -o cmp
 	./cmp Funcional1.txt
-	./cmp Funcional2.txt
-	./cmp Funcional3.txt
-	./cmp NAOFuncional1.txt
-	./cmp NAOFuncional2.txt
-	./cmp NAOFuncional3.txt
+
+clean:
+	rm -f lex.yy.c AnalisadorLexico.tab.c AnalisadorLexico.tab.h cmp

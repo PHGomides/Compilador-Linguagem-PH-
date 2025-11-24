@@ -67,14 +67,44 @@
 
 
 /* First part of user prologue.  */
-#line 1 "AnalisadorLexico.y"
+#line 2 "AnalisadorLexico.y"
 
-#include "node.h"
-int yylex(void);
+#include <stdio.h>
+#include <stdbool.h>
+#include <string.h>
+#include <stdlib.h>
+
+extern int yylineno;
+
 int yyerror(const char *s);
-extern int errorcount;
+int yylex(void);
+int errorc = 0;
 
-#line 78 "AnalisadorLexico.tab.c"
+typedef struct {
+    char *nome;
+    int token;
+} simbolo;
+
+struct syntaticno{
+     int id;
+     char *label;
+     simbolo *sim;
+     float constvalue;
+     int qtdfilhos;
+     struct syntaticno *filhos[1];
+};
+typedef struct syntaticno syntaticno;
+
+int simbolo_qtd = 0;
+simbolo tabela_simbolos[100];
+simbolo *simbolo_novo(char *nome, int token);
+simbolo *simbolo_existe(char *nome);
+syntaticno *novo_syntaticno(char *labeL, int filhos);
+void debug(syntaticno *root);
+   
+
+
+#line 108 "AnalisadorLexico.tab.c"
 
 # ifndef YY_CAST
 #  ifdef __cplusplus
@@ -484,9 +514,9 @@ union yyalloc
 #endif /* !YYCOPY_NEEDED */
 
 /* YYFINAL -- State number of the termination state.  */
-#define YYFINAL  40
+#define YYFINAL  3
 /* YYLAST -- Last index in YYTABLE.  */
-#define YYLAST   105
+#define YYLAST   101
 
 /* YYNTOKENS -- Number of terminals.  */
 #define YYNTOKENS  34
@@ -495,7 +525,7 @@ union yyalloc
 /* YYNRULES -- Number of rules.  */
 #define YYNRULES  52
 /* YYNSTATES -- Number of states.  */
-#define YYNSTATES  108
+#define YYNSTATES  107
 
 /* YYMAXUTOK -- Last valid token kind.  */
 #define YYMAXUTOK   274
@@ -544,14 +574,14 @@ static const yytype_int8 yytranslate[] =
 
 #if YYDEBUG
 /* YYRLINE[YYN] -- Source line where rule number YYN was defined.  */
-static const yytype_uint8 yyrline[] =
+static const yytype_int16 yyrline[] =
 {
-       0,    34,    34,    43,    46,    52,    53,    56,    57,    58,
-      59,    60,    61,    62,    67,    70,    75,    78,    83,    88,
-      90,    91,    94,    95,    98,    99,   100,   103,   104,   105,
-     106,   107,   110,   111,   112,   115,   116,   117,   120,   121,
-     124,   125,   126,   127,   128,   131,   136,   139,   142,   143,
-     144,   147,   148
+       0,    65,    65,    75,    76,    87,    88,    91,    92,    93,
+      94,    95,    96,    97,   105,   110,   118,   122,   129,   136,
+     139,   144,   148,   153,   157,   162,   167,   171,   176,   181,
+     186,   191,   195,   200,   204,   207,   212,   217,   220,   224,
+     227,   231,   235,   239,   243,   255,   269,   280,   286,   291,
+     296,   299,   305
 };
 #endif
 
@@ -586,7 +616,7 @@ yysymbol_name (yysymbol_kind_t yysymbol)
 }
 #endif
 
-#define YYPACT_NINF (-80)
+#define YYPACT_NINF (-72)
 
 #define yypact_value_is_default(Yyn) \
   ((Yyn) == YYPACT_NINF)
@@ -600,17 +630,17 @@ yysymbol_name (yysymbol_kind_t yysymbol)
    STATE-NUM.  */
 static const yytype_int8 yypact[] =
 {
-      50,     2,   -10,    11,     5,     7,    50,    50,    39,    50,
-     -80,   -80,   -80,   -80,   -80,   -80,   -80,   -80,   -80,   -80,
-     -80,   -80,   -80,     2,     2,    22,    23,    26,    33,   -80,
-      69,    20,   -80,   -80,     2,    25,     2,     2,    51,    32,
-     -80,   -80,    52,   -80,   -80,     2,     2,     2,     2,     2,
-       2,     2,     2,     2,     2,     2,     2,    47,     4,    57,
-      60,    63,   -80,   -80,    26,    33,   -80,   -80,    24,    24,
-      24,    24,    20,    20,   -80,   -80,   -80,   -80,     4,   -14,
-     -80,    50,    71,     2,    -9,     4,     4,     2,   -80,    77,
-      68,   -80,    70,   -80,   -80,   -80,    65,    50,     2,    66,
-     -80,   -80,   -80,    78,   -80,    71,    82,    71
+     -72,    12,    33,   -72,    -1,   -16,    14,     7,     9,    33,
+     -72,   -72,   -72,   -72,   -72,   -72,   -72,   -72,   -72,   -72,
+     -72,   -72,   -72,   -72,    -1,    -1,    10,    21,    25,    53,
+     -72,    49,    34,   -72,   -72,    -1,    13,    -1,    -1,    36,
+      15,    29,   -72,   -72,    -1,    -1,    -1,    -1,    -1,    -1,
+      -1,    -1,    -1,    -1,    -1,    -1,    45,     2,    32,    39,
+      51,   -72,   -72,    25,    53,   -72,   -72,    55,    55,    55,
+      55,    34,    34,   -72,   -72,   -72,   -72,     2,    19,   -72,
+      33,    48,    -1,   -14,     2,     2,    -1,   -72,    76,    71,
+     -72,    72,   -72,   -72,   -72,    68,    33,    -1,    70,   -72,
+     -72,   -72,    74,   -72,    48,    86,    48
 };
 
 /* YYDEFACT[STATE-NUM] -- Default reduction number in state STATE-NUM.
@@ -618,33 +648,33 @@ static const yytype_int8 yypact[] =
    means the default is an error.  */
 static const yytype_int8 yydefact[] =
 {
-       0,     0,     0,     0,     0,     0,     0,     0,     0,     2,
-       3,     6,     5,    10,    12,    11,     8,     7,     9,    41,
-      42,    44,    43,     0,     0,     0,    19,    21,    23,    26,
-      31,    34,    37,    39,     0,     0,     0,     0,     0,     0,
-       1,     4,     0,    38,    47,     0,     0,     0,     0,     0,
+       3,     0,     2,     1,     0,     0,     0,     0,     0,     0,
+       3,     4,     6,     5,    10,    12,    11,     8,     7,     9,
+      41,    42,    44,    43,     0,     0,     0,    19,    21,    23,
+      26,    31,    34,    37,    39,     0,     0,     0,     0,     0,
+       0,     0,    38,    47,     0,     0,     0,     0,     0,     0,
        0,     0,     0,     0,     0,     0,     0,     0,     0,     0,
-       0,     0,    16,    40,    20,    22,    24,    25,    29,    30,
-      27,    28,    32,    33,    35,    36,    46,    51,     0,     0,
-      50,     0,     0,     0,     0,     0,     0,     0,    14,     6,
-       0,    17,     0,    52,    48,    49,     0,     0,     0,     0,
-      45,    13,    15,     0,    18,     0,     0,     0
+       0,    16,    40,    20,    22,    24,    25,    29,    30,    27,
+      28,    32,    33,    35,    36,    46,    51,     0,     0,    50,
+       0,     0,     0,     0,     0,     0,     0,    14,     6,     0,
+      17,     0,    52,    48,    49,     0,     0,     0,     0,    45,
+      13,    15,     0,    18,     0,     0,     0
 };
 
 /* YYPGOTO[NTERM-NUM].  */
 static const yytype_int8 yypgoto[] =
 {
-     -80,   -80,    91,    -5,   -79,     3,   -80,   -80,   -80,   -23,
-     -80,    56,    58,    18,   -20,    14,   -19,   -80,   -80,   -80,
-     -80,    27,   -16
+     -72,   -72,    87,    -8,   -71,     3,   -72,   -72,   -72,   -24,
+     -72,    54,    56,    38,    30,    35,   -23,   -72,   -72,   -72,
+     -72,    23,     5
 };
 
 /* YYDEFGOTO[NTERM-NUM].  */
 static const yytype_int8 yydefgoto[] =
 {
-       0,     8,     9,    10,    11,    12,    13,    14,    15,    25,
-      26,    27,    28,    29,    30,    31,    32,    33,    16,    17,
-      18,    79,    80
+       0,     1,     2,    11,    12,    13,    14,    15,    16,    26,
+      27,    28,    29,    30,    31,    32,    33,    34,    17,    18,
+      19,    78,    79
 };
 
 /* YYTABLE[YYPACT[STATE-NUM]] -- What to do in state STATE-NUM.  If
@@ -652,49 +682,49 @@ static const yytype_int8 yydefgoto[] =
    number is the opposite.  If YYTABLE_NINF, syntax error.  */
 static const yytype_int8 yytable[] =
 {
-      42,    38,    89,    91,    41,    43,    19,    20,    21,    22,
-      77,    57,    93,    59,    60,    85,    86,    35,   101,    87,
-      85,    86,    23,    34,    78,    36,   106,    37,   101,    68,
-      69,    70,    71,    24,    41,     1,    74,    75,     2,    40,
-       3,     4,    45,     5,    46,     6,    44,    47,    48,    55,
-      56,    53,    54,     1,     7,    62,     2,    58,     3,     4,
-      92,     5,    61,     6,    96,    66,    67,    72,    73,    94,
-      95,    76,     7,    63,     1,   103,    88,     2,    81,     3,
-      90,    82,     5,    83,     6,    49,    50,    97,    98,   100,
-     104,    99,   107,     7,    51,    52,    53,    54,    39,   105,
-     102,    64,     0,     0,    65,    84
+      41,    39,    42,    20,    21,    22,    23,    92,    76,    88,
+      90,    56,     3,    58,    59,    84,    85,    35,     4,    24,
+      36,     5,    77,     6,     7,   100,     8,    37,     9,    38,
+      25,    73,    74,   105,    43,   100,     4,    10,    61,     5,
+      44,     6,     7,    45,     8,    57,     9,    60,    84,    85,
+      62,     4,    86,    80,     5,    10,     6,    89,    91,     8,
+      81,     9,    95,    54,    55,    48,    49,    46,    47,    75,
+      10,    82,    87,   102,    50,    51,    52,    53,    67,    68,
+      69,    70,    52,    53,    65,    66,    96,    71,    72,    93,
+      94,    97,    99,    98,   103,   104,   106,    40,    63,   101,
+      83,    64
 };
 
 static const yytype_int8 yycheck[] =
 {
-      23,     6,    81,    82,     9,    24,     4,     5,     6,     7,
-       6,    34,    21,    36,    37,    29,    30,     6,    97,    33,
-      29,    30,    20,    33,    20,    20,   105,    20,   107,    49,
-      50,    51,    52,    31,    39,     3,    55,    56,     6,     0,
-       8,     9,    19,    11,    18,    13,    24,    14,    15,    29,
-      30,    27,    28,     3,    22,    23,     6,    32,     8,     9,
-      83,    11,    11,    13,    87,    47,    48,    53,    54,    85,
-      86,    24,    22,    21,     3,    98,    81,     6,    21,     8,
-       9,    21,    11,    20,    13,    16,    17,    10,    20,    24,
-      24,    21,    10,    22,    25,    26,    27,    28,     7,    21,
-      97,    45,    -1,    -1,    46,    78
+      24,     9,    25,     4,     5,     6,     7,    21,     6,    80,
+      81,    35,     0,    37,    38,    29,    30,    33,     3,    20,
+       6,     6,    20,     8,     9,    96,    11,    20,    13,    20,
+      31,    54,    55,   104,    24,   106,     3,    22,    23,     6,
+      19,     8,     9,    18,    11,    32,    13,    11,    29,    30,
+      21,     3,    33,    21,     6,    22,     8,     9,    82,    11,
+      21,    13,    86,    29,    30,    16,    17,    14,    15,    24,
+      22,    20,    80,    97,    25,    26,    27,    28,    48,    49,
+      50,    51,    27,    28,    46,    47,    10,    52,    53,    84,
+      85,    20,    24,    21,    24,    21,    10,    10,    44,    96,
+      77,    45
 };
 
 /* YYSTOS[STATE-NUM] -- The symbol kind of the accessing symbol of
    state STATE-NUM.  */
 static const yytype_int8 yystos[] =
 {
-       0,     3,     6,     8,     9,    11,    13,    22,    35,    36,
-      37,    38,    39,    40,    41,    42,    52,    53,    54,     4,
-       5,     6,     7,    20,    31,    43,    44,    45,    46,    47,
-      48,    49,    50,    51,    33,     6,    20,    20,    37,    36,
-       0,    37,    43,    50,    24,    19,    18,    14,    15,    16,
-      17,    25,    26,    27,    28,    29,    30,    43,    32,    43,
-      43,    11,    23,    21,    45,    46,    47,    47,    48,    48,
-      48,    48,    49,    49,    50,    50,    24,     6,    20,    55,
-      56,    21,    21,    20,    55,    29,    30,    33,    37,    38,
-       9,    38,    43,    21,    56,    56,    43,    10,    20,    21,
-      24,    38,    39,    43,    24,    21,    38,    10
+       0,    35,    36,     0,     3,     6,     8,     9,    11,    13,
+      22,    37,    38,    39,    40,    41,    42,    52,    53,    54,
+       4,     5,     6,     7,    20,    31,    43,    44,    45,    46,
+      47,    48,    49,    50,    51,    33,     6,    20,    20,    37,
+      36,    43,    50,    24,    19,    18,    14,    15,    16,    17,
+      25,    26,    27,    28,    29,    30,    43,    32,    43,    43,
+      11,    23,    21,    45,    46,    47,    47,    48,    48,    48,
+      48,    49,    49,    50,    50,    24,     6,    20,    55,    56,
+      21,    21,    20,    55,    29,    30,    33,    37,    38,     9,
+      38,    43,    21,    56,    56,    43,    10,    20,    21,    24,
+      38,    39,    43,    24,    21,    38,    10
 };
 
 /* YYR1[RULE-NUM] -- Symbol kind of the left-hand side of rule RULE-NUM.  */
@@ -711,7 +741,7 @@ static const yytype_int8 yyr1[] =
 /* YYR2[RULE-NUM] -- Number of symbols on the right-hand side of rule RULE-NUM.  */
 static const yytype_int8 yyr2[] =
 {
-       0,     2,     1,     1,     2,     1,     1,     1,     1,     1,
+       0,     2,     1,     0,     2,     1,     1,     1,     1,     1,
        1,     1,     1,     7,     5,     7,     3,     5,     7,     1,
        3,     1,     3,     1,     3,     3,     1,     3,     3,     3,
        3,     1,     3,     3,     1,     3,     3,     1,     2,     1,
@@ -1450,335 +1480,455 @@ yyreduce:
   switch (yyn)
     {
   case 2: /* program: stmts  */
-#line 34 "AnalisadorLexico.y"
-                { 
-    if (errorcount == 0) {
-        Program pg((yyvsp[0].node));
-        pg.printAst();
-    }
-}
-#line 1461 "AnalisadorLexico.tab.c"
+#line 65 "AnalisadorLexico.y"
+                    { if (errorc > 0) 
+                         printf("Compilação finalizada com %d erros\n", errorc);
+                      else 
+                         printf("Compilação finalizada sem erros\n");
+                      syntaticno *root = novo_syntaticno("STMTS", 1);
+                      root->filhos[0] = (yyvsp[0].no);
+                      debug(root);
+                    }
+#line 1493 "AnalisadorLexico.tab.c"
     break;
 
-  case 3: /* stmts: stmt  */
-#line 43 "AnalisadorLexico.y"
-             { 
-          (yyval.node) = new Stmts((yyvsp[0].node)); 
-      }
-#line 1469 "AnalisadorLexico.tab.c"
+  case 3: /* stmts: %empty  */
+#line 75 "AnalisadorLexico.y"
+                     { (yyval.no) = NULL; }
+#line 1499 "AnalisadorLexico.tab.c"
     break;
 
   case 4: /* stmts: stmts stmt  */
-#line 46 "AnalisadorLexico.y"
-                   { 
-          (yyvsp[-1].node)->append((yyvsp[0].node)); 
-          (yyval.node) = (yyvsp[-1].node); 
-      }
-#line 1478 "AnalisadorLexico.tab.c"
+#line 76 "AnalisadorLexico.y"
+                     { 
+                         if ((yyvsp[-1].no) == NULL) 
+                             (yyval.no) = (yyvsp[0].no);
+                         else {
+                             (yyval.no) = novo_syntaticno("stmts", 2);
+                             (yyval.no)->filhos[0] = (yyvsp[-1].no);
+                             (yyval.no)->filhos[1] = (yyvsp[0].no);
+                         }
+                       }
+#line 1513 "AnalisadorLexico.tab.c"
     break;
 
   case 5: /* stmt: stmt_incompleto  */
-#line 52 "AnalisadorLexico.y"
-                       { (yyval.node) = (yyvsp[0].node); }
-#line 1484 "AnalisadorLexico.tab.c"
+#line 87 "AnalisadorLexico.y"
+                       { (yyval.no) = (yyvsp[0].no); }
+#line 1519 "AnalisadorLexico.tab.c"
     break;
 
   case 6: /* stmt: stmt_completo  */
-#line 53 "AnalisadorLexico.y"
-                       { (yyval.node) = (yyvsp[0].node); }
-#line 1490 "AnalisadorLexico.tab.c"
+#line 88 "AnalisadorLexico.y"
+                       { (yyval.no) = (yyvsp[0].no); }
+#line 1525 "AnalisadorLexico.tab.c"
     break;
 
   case 7: /* stmt_completo: atribuicao  */
-#line 56 "AnalisadorLexico.y"
-                           { (yyval.node) = (yyvsp[0].node); }
-#line 1496 "AnalisadorLexico.tab.c"
+#line 91 "AnalisadorLexico.y"
+                           { (yyval.no) = (yyvsp[0].no); }
+#line 1531 "AnalisadorLexico.tab.c"
     break;
 
   case 8: /* stmt_completo: declaracao  */
-#line 57 "AnalisadorLexico.y"
-                           { (yyval.node) = (yyvsp[0].node); }
-#line 1502 "AnalisadorLexico.tab.c"
+#line 92 "AnalisadorLexico.y"
+                           { (yyval.no) = (yyvsp[0].no); }
+#line 1537 "AnalisadorLexico.tab.c"
     break;
 
   case 9: /* stmt_completo: comando_print  */
-#line 58 "AnalisadorLexico.y"
-                              { (yyval.node) = (yyvsp[0].node); }
-#line 1508 "AnalisadorLexico.tab.c"
+#line 93 "AnalisadorLexico.y"
+                              { (yyval.no) = (yyvsp[0].no); }
+#line 1543 "AnalisadorLexico.tab.c"
     break;
 
   case 10: /* stmt_completo: bloco  */
-#line 59 "AnalisadorLexico.y"
-                      { (yyval.node) = (yyvsp[0].node); }
-#line 1514 "AnalisadorLexico.tab.c"
+#line 94 "AnalisadorLexico.y"
+                      { (yyval.no) = (yyvsp[0].no); }
+#line 1549 "AnalisadorLexico.tab.c"
     break;
 
   case 11: /* stmt_completo: comando_do_while  */
-#line 60 "AnalisadorLexico.y"
-                                 { (yyval.node) = (yyvsp[0].node); }
-#line 1520 "AnalisadorLexico.tab.c"
+#line 95 "AnalisadorLexico.y"
+                                 { (yyval.no) = (yyvsp[0].no); }
+#line 1555 "AnalisadorLexico.tab.c"
     break;
 
   case 12: /* stmt_completo: comando_while_completo  */
-#line 61 "AnalisadorLexico.y"
-                                       { (yyval.node) = (yyvsp[0].node); }
-#line 1526 "AnalisadorLexico.tab.c"
+#line 96 "AnalisadorLexico.y"
+                                       { (yyval.no) = (yyvsp[0].no); }
+#line 1561 "AnalisadorLexico.tab.c"
     break;
 
   case 13: /* stmt_completo: TOK_IF '(' expr ')' stmt_completo TOK_ELSE stmt_completo  */
-#line 62 "AnalisadorLexico.y"
+#line 97 "AnalisadorLexico.y"
                                                                          {
-                    (yyval.node) = new IfElse((yyvsp[-4].node), (yyvsp[-2].node), (yyvsp[0].node));
+                    (yyval.no) = novo_syntaticno("IF", 3);
+                    (yyval.no)->filhos[0] = (yyvsp[-4].no);
+                    (yyval.no)->filhos[1] = (yyvsp[-2].no);
+                    (yyval.no)->filhos[2] = (yyvsp[0].no);
                 }
-#line 1534 "AnalisadorLexico.tab.c"
-    break;
-
-  case 14: /* stmt_incompleto: TOK_IF '(' expr ')' stmt  */
-#line 67 "AnalisadorLexico.y"
-                                           {
-                      (yyval.node) = new IfElse((yyvsp[-2].node), (yyvsp[0].node));
-                  }
-#line 1542 "AnalisadorLexico.tab.c"
-    break;
-
-  case 15: /* stmt_incompleto: TOK_IF '(' expr ')' stmt_completo TOK_ELSE stmt_incompleto  */
-#line 70 "AnalisadorLexico.y"
-                                                                             {
-                      (yyval.node) = new IfElse((yyvsp[-4].node), (yyvsp[-2].node), (yyvsp[0].node));
-                  }
-#line 1550 "AnalisadorLexico.tab.c"
-    break;
-
-  case 16: /* bloco: '{' stmts '}'  */
-#line 75 "AnalisadorLexico.y"
-                      { (yyval.node) = new Block((yyvsp[-1].node)); }
-#line 1556 "AnalisadorLexico.tab.c"
-    break;
-
-  case 17: /* comando_while_completo: TOK_WHILE '(' expr ')' stmt_completo  */
-#line 78 "AnalisadorLexico.y"
-                                                              {
-                            (yyval.node) = new While((yyvsp[-2].node), (yyvsp[0].node));
-                         }
-#line 1564 "AnalisadorLexico.tab.c"
-    break;
-
-  case 18: /* comando_do_while: TOK_DO stmt TOK_WHILE '(' expr ')' ';'  */
-#line 83 "AnalisadorLexico.y"
-                                                          {
-                       (yyval.node) = new DoWhile((yyvsp[-5].node), (yyvsp[-2].node));
-                   }
 #line 1572 "AnalisadorLexico.tab.c"
     break;
 
+  case 14: /* stmt_incompleto: TOK_IF '(' expr ')' stmt  */
+#line 105 "AnalisadorLexico.y"
+                                           {
+                      (yyval.no) = novo_syntaticno("IF", 2);
+                      (yyval.no)->filhos[0] = (yyvsp[-2].no);
+                      (yyval.no)->filhos[1] = (yyvsp[0].no);
+                  }
+#line 1582 "AnalisadorLexico.tab.c"
+    break;
+
+  case 15: /* stmt_incompleto: TOK_IF '(' expr ')' stmt_completo TOK_ELSE stmt_incompleto  */
+#line 110 "AnalisadorLexico.y"
+                                                                             {
+                      (yyval.no) = novo_syntaticno("IF", 3);
+                      (yyval.no)->filhos[0] = (yyvsp[-4].no);
+                      (yyval.no)->filhos[1] = (yyvsp[-2].no);
+                      (yyval.no)->filhos[2] = (yyvsp[0].no);
+                  }
+#line 1593 "AnalisadorLexico.tab.c"
+    break;
+
+  case 16: /* bloco: '{' stmts '}'  */
+#line 118 "AnalisadorLexico.y"
+                      { (yyval.no) = (yyvsp[-1].no); }
+#line 1599 "AnalisadorLexico.tab.c"
+    break;
+
+  case 17: /* comando_while_completo: TOK_WHILE '(' expr ')' stmt_completo  */
+#line 122 "AnalisadorLexico.y"
+                                                              {
+                            (yyval.no) = novo_syntaticno("WHILE", 2);
+                            (yyval.no)->filhos[0] = (yyvsp[-2].no);
+                            (yyval.no)->filhos[1] = (yyvsp[0].no);
+                         }
+#line 1609 "AnalisadorLexico.tab.c"
+    break;
+
+  case 18: /* comando_do_while: TOK_DO stmt TOK_WHILE '(' expr ')' ';'  */
+#line 129 "AnalisadorLexico.y"
+                                                          {
+                       (yyval.no) = novo_syntaticno("DO_WHILE", 2);
+                       (yyval.no)->filhos[0] = (yyvsp[-5].no);
+                       (yyval.no)->filhos[1] = (yyvsp[-2].no);
+                   }
+#line 1619 "AnalisadorLexico.tab.c"
+    break;
+
   case 19: /* expr: expr_ou  */
-#line 88 "AnalisadorLexico.y"
-               { (yyval.node) = (yyvsp[0].node); }
-#line 1578 "AnalisadorLexico.tab.c"
+#line 136 "AnalisadorLexico.y"
+               { (yyval.no) = (yyvsp[0].no); }
+#line 1625 "AnalisadorLexico.tab.c"
     break;
 
   case 20: /* expr_ou: expr_ou TOK_OR expr_e  */
-#line 90 "AnalisadorLexico.y"
-                                { (yyval.node) = new BinaryOp((yyvsp[-2].node), "||", (yyvsp[0].node)); }
-#line 1584 "AnalisadorLexico.tab.c"
+#line 139 "AnalisadorLexico.y"
+                                  { 
+                    (yyval.no) = novo_syntaticno("||", 2); 
+                    (yyval.no)->filhos[0] = (yyvsp[-2].no); 
+                    (yyval.no)->filhos[1] = (yyvsp[0].no); 
+                    }
+#line 1635 "AnalisadorLexico.tab.c"
     break;
 
   case 21: /* expr_ou: expr_e  */
-#line 91 "AnalisadorLexico.y"
-                 { (yyval.node) = (yyvsp[0].node); }
-#line 1590 "AnalisadorLexico.tab.c"
+#line 144 "AnalisadorLexico.y"
+                  { (yyval.no) = (yyvsp[0].no); }
+#line 1641 "AnalisadorLexico.tab.c"
     break;
 
   case 22: /* expr_e: expr_e TOK_AND expr_igualdade  */
-#line 94 "AnalisadorLexico.y"
-                                       { (yyval.node) = new BinaryOp((yyvsp[-2].node), "&&", (yyvsp[0].node)); }
-#line 1596 "AnalisadorLexico.tab.c"
+#line 148 "AnalisadorLexico.y"
+                                       { 
+                         (yyval.no) = novo_syntaticno("&&", 2); 
+                         (yyval.no)->filhos[0] = (yyvsp[-2].no); 
+                         (yyval.no)->filhos[1] = (yyvsp[0].no); 
+                         }
+#line 1651 "AnalisadorLexico.tab.c"
     break;
 
   case 23: /* expr_e: expr_igualdade  */
-#line 95 "AnalisadorLexico.y"
-                        { (yyval.node) = (yyvsp[0].node); }
-#line 1602 "AnalisadorLexico.tab.c"
+#line 153 "AnalisadorLexico.y"
+                         { (yyval.no) = (yyvsp[0].no); }
+#line 1657 "AnalisadorLexico.tab.c"
     break;
 
   case 24: /* expr_igualdade: expr_igualdade TOK_EQ expr_relacional  */
-#line 98 "AnalisadorLexico.y"
-                                                       { (yyval.node) = new BinaryOp((yyvsp[-2].node), "==", (yyvsp[0].node)); }
-#line 1608 "AnalisadorLexico.tab.c"
+#line 157 "AnalisadorLexico.y"
+                                                       { 
+                                        (yyval.no) = novo_syntaticno("==", 2); 
+                                        (yyval.no)->filhos[0] = (yyvsp[-2].no); 
+                                        (yyval.no)->filhos[1] = (yyvsp[0].no); 
+                                   }
+#line 1667 "AnalisadorLexico.tab.c"
     break;
 
   case 25: /* expr_igualdade: expr_igualdade TOK_NE expr_relacional  */
-#line 99 "AnalisadorLexico.y"
-                                                       { (yyval.node) = new BinaryOp((yyvsp[-2].node), "!=", (yyvsp[0].node)); }
-#line 1614 "AnalisadorLexico.tab.c"
+#line 162 "AnalisadorLexico.y"
+                                                       { 
+                                        (yyval.no) = novo_syntaticno("!=", 2); 
+                                        (yyval.no)->filhos[0] = (yyvsp[-2].no); 
+                                        (yyval.no)->filhos[1] = (yyvsp[0].no); 
+                                   }
+#line 1677 "AnalisadorLexico.tab.c"
     break;
 
   case 26: /* expr_igualdade: expr_relacional  */
-#line 100 "AnalisadorLexico.y"
-                                 { (yyval.node) = (yyvsp[0].node); }
-#line 1620 "AnalisadorLexico.tab.c"
+#line 167 "AnalisadorLexico.y"
+                                  { (yyval.no) = (yyvsp[0].no); }
+#line 1683 "AnalisadorLexico.tab.c"
     break;
 
   case 27: /* expr_relacional: expr_arit '<' expr_arit  */
-#line 103 "AnalisadorLexico.y"
-                                          { (yyval.node) = new BinaryOp((yyvsp[-2].node), "<", (yyvsp[0].node)); }
-#line 1626 "AnalisadorLexico.tab.c"
+#line 171 "AnalisadorLexico.y"
+                                             { 
+                              (yyval.no) = novo_syntaticno("<", 2);  
+                              (yyval.no)->filhos[0] = (yyvsp[-2].no); 
+                              (yyval.no)->filhos[1] = (yyvsp[0].no); 
+                         }
+#line 1693 "AnalisadorLexico.tab.c"
     break;
 
   case 28: /* expr_relacional: expr_arit '>' expr_arit  */
-#line 104 "AnalisadorLexico.y"
-                                          { (yyval.node) = new BinaryOp((yyvsp[-2].node), ">", (yyvsp[0].node)); }
-#line 1632 "AnalisadorLexico.tab.c"
+#line 176 "AnalisadorLexico.y"
+                                             { 
+                              (yyval.no) = novo_syntaticno(">", 2);  
+                              (yyval.no)->filhos[0] = (yyvsp[-2].no); 
+                              (yyval.no)->filhos[1] = (yyvsp[0].no); 
+                         }
+#line 1703 "AnalisadorLexico.tab.c"
     break;
 
   case 29: /* expr_relacional: expr_arit TOK_LE expr_arit  */
-#line 105 "AnalisadorLexico.y"
-                                             { (yyval.node) = new BinaryOp((yyvsp[-2].node), "<=", (yyvsp[0].node)); }
-#line 1638 "AnalisadorLexico.tab.c"
+#line 181 "AnalisadorLexico.y"
+                                             { 
+                              (yyval.no) = novo_syntaticno("<=", 2); 
+                              (yyval.no)->filhos[0] = (yyvsp[-2].no); 
+                              (yyval.no)->filhos[1] = (yyvsp[0].no); 
+                         }
+#line 1713 "AnalisadorLexico.tab.c"
     break;
 
   case 30: /* expr_relacional: expr_arit TOK_GE expr_arit  */
-#line 106 "AnalisadorLexico.y"
-                                             { (yyval.node) = new BinaryOp((yyvsp[-2].node), ">=", (yyvsp[0].node)); }
-#line 1644 "AnalisadorLexico.tab.c"
+#line 186 "AnalisadorLexico.y"
+                                             { 
+                              (yyval.no) = novo_syntaticno(">=", 2); 
+                              (yyval.no)->filhos[0] = (yyvsp[-2].no); 
+                              (yyval.no)->filhos[1] = (yyvsp[0].no); 
+                         }
+#line 1723 "AnalisadorLexico.tab.c"
     break;
 
   case 31: /* expr_relacional: expr_arit  */
-#line 107 "AnalisadorLexico.y"
-                            { (yyval.node) = (yyvsp[0].node); }
-#line 1650 "AnalisadorLexico.tab.c"
+#line 191 "AnalisadorLexico.y"
+                             { (yyval.no) = (yyvsp[0].no); }
+#line 1729 "AnalisadorLexico.tab.c"
     break;
 
   case 32: /* expr_arit: expr_arit '+' term  */
-#line 110 "AnalisadorLexico.y"
-                               { (yyval.node) = new BinaryOp((yyvsp[-2].node), "+", (yyvsp[0].node)); }
-#line 1656 "AnalisadorLexico.tab.c"
+#line 195 "AnalisadorLexico.y"
+                               { 
+                         (yyval.no) = novo_syntaticno("+", 2); 
+                         (yyval.no)->filhos[0] = (yyvsp[-2].no); 
+                         (yyval.no)->filhos[1] = (yyvsp[0].no); 
+                    }
+#line 1739 "AnalisadorLexico.tab.c"
     break;
 
   case 33: /* expr_arit: expr_arit '-' term  */
-#line 111 "AnalisadorLexico.y"
-                               { (yyval.node) = new BinaryOp((yyvsp[-2].node), "-", (yyvsp[0].node)); }
-#line 1662 "AnalisadorLexico.tab.c"
-    break;
-
-  case 34: /* expr_arit: term  */
-#line 112 "AnalisadorLexico.y"
-                 { (yyval.node) = (yyvsp[0].node); }
-#line 1668 "AnalisadorLexico.tab.c"
-    break;
-
-  case 35: /* term: term '*' unary  */
-#line 115 "AnalisadorLexico.y"
-                      { (yyval.node) = new BinaryOp((yyvsp[-2].node), "*", (yyvsp[0].node)); }
-#line 1674 "AnalisadorLexico.tab.c"
-    break;
-
-  case 36: /* term: term '/' unary  */
-#line 116 "AnalisadorLexico.y"
-                      { (yyval.node) = new BinaryOp((yyvsp[-2].node), "/", (yyvsp[0].node)); }
-#line 1680 "AnalisadorLexico.tab.c"
-    break;
-
-  case 37: /* term: unary  */
-#line 117 "AnalisadorLexico.y"
-             { (yyval.node) = (yyvsp[0].node); }
-#line 1686 "AnalisadorLexico.tab.c"
-    break;
-
-  case 38: /* unary: '!' unary  */
-#line 120 "AnalisadorLexico.y"
-                  { (yyval.node) = new UnaryOp("!", (yyvsp[0].node)); }
-#line 1692 "AnalisadorLexico.tab.c"
-    break;
-
-  case 39: /* unary: factor  */
-#line 121 "AnalisadorLexico.y"
-               { (yyval.node) = (yyvsp[0].node); }
-#line 1698 "AnalisadorLexico.tab.c"
-    break;
-
-  case 40: /* factor: '(' expr ')'  */
-#line 124 "AnalisadorLexico.y"
-                      { (yyval.node) = (yyvsp[-1].node); }
-#line 1704 "AnalisadorLexico.tab.c"
-    break;
-
-  case 41: /* factor: TOK_INT  */
-#line 125 "AnalisadorLexico.y"
-                 { (yyval.node) = new ConstInteger((yyvsp[0].valor_int)); }
-#line 1710 "AnalisadorLexico.tab.c"
-    break;
-
-  case 42: /* factor: TOK_FLT  */
-#line 126 "AnalisadorLexico.y"
-                 { (yyval.node) = new ConstDouble((yyvsp[0].valor_float)); }
-#line 1716 "AnalisadorLexico.tab.c"
-    break;
-
-  case 43: /* factor: TOK_BOOL  */
-#line 127 "AnalisadorLexico.y"
-                  { (yyval.node) = new ConstBool((yyvsp[0].valor_int)); }
-#line 1722 "AnalisadorLexico.tab.c"
-    break;
-
-  case 44: /* factor: TOK_IDENT  */
-#line 128 "AnalisadorLexico.y"
-                   { (yyval.node) = new Load((yyvsp[0].nome)); }
-#line 1728 "AnalisadorLexico.tab.c"
-    break;
-
-  case 45: /* declaracao: TOK_LET TOK_IDENT ':' tipo_unidade '=' expr ';'  */
-#line 131 "AnalisadorLexico.y"
-                                                             {
-                 (yyval.node) = new Let((yyvsp[-5].nome), (yyvsp[-3].node), (yyvsp[-1].node));
-           }
-#line 1736 "AnalisadorLexico.tab.c"
-    break;
-
-  case 46: /* atribuicao: TOK_IDENT '=' expr ';'  */
-#line 136 "AnalisadorLexico.y"
-                                    { (yyval.node) = new Store((yyvsp[-3].nome), (yyvsp[-1].node)); }
-#line 1742 "AnalisadorLexico.tab.c"
-    break;
-
-  case 47: /* comando_print: TOK_PRINT expr ';'  */
-#line 139 "AnalisadorLexico.y"
-                                   { (yyval.node) = new Print((yyvsp[-1].node)); }
+#line 200 "AnalisadorLexico.y"
+                               { (yyval.no) = novo_syntaticno("-", 2); 
+                         (yyval.no)->filhos[0] = (yyvsp[-2].no); 
+                         (yyval.no)->filhos[1] = (yyvsp[0].no); 
+                    }
 #line 1748 "AnalisadorLexico.tab.c"
     break;
 
-  case 48: /* tipo_unidade: tipo_unidade '*' fator_unidade  */
-#line 142 "AnalisadorLexico.y"
-                                              { (yyval.node) = new BinaryOp((yyvsp[-2].node), "*", (yyvsp[0].node)); }
+  case 34: /* expr_arit: term  */
+#line 204 "AnalisadorLexico.y"
+                  { (yyval.no) = (yyvsp[0].no); }
 #line 1754 "AnalisadorLexico.tab.c"
     break;
 
+  case 35: /* term: term '*' unary  */
+#line 207 "AnalisadorLexico.y"
+                      { 
+               (yyval.no) = novo_syntaticno("*", 2); 
+               (yyval.no)->filhos[0] = (yyvsp[-2].no); 
+               (yyval.no)->filhos[1] = (yyvsp[0].no); 
+          }
+#line 1764 "AnalisadorLexico.tab.c"
+    break;
+
+  case 36: /* term: term '/' unary  */
+#line 212 "AnalisadorLexico.y"
+                      { 
+               (yyval.no) = novo_syntaticno("/", 2); 
+               (yyval.no)->filhos[0] = (yyvsp[-2].no);
+               (yyval.no)->filhos[1] = (yyvsp[0].no); 
+          }
+#line 1774 "AnalisadorLexico.tab.c"
+    break;
+
+  case 37: /* term: unary  */
+#line 217 "AnalisadorLexico.y"
+             { (yyval.no) = (yyvsp[0].no); }
+#line 1780 "AnalisadorLexico.tab.c"
+    break;
+
+  case 38: /* unary: '!' unary  */
+#line 220 "AnalisadorLexico.y"
+                  { 
+          (yyval.no) = novo_syntaticno("!", 1);  
+          (yyval.no)->filhos[0] = (yyvsp[0].no); 
+     }
+#line 1789 "AnalisadorLexico.tab.c"
+    break;
+
+  case 39: /* unary: factor  */
+#line 224 "AnalisadorLexico.y"
+                { (yyval.no) = (yyvsp[0].no); }
+#line 1795 "AnalisadorLexico.tab.c"
+    break;
+
+  case 40: /* factor: '(' expr ')'  */
+#line 227 "AnalisadorLexico.y"
+                      { 
+               (yyval.no) = novo_syntaticno("()", 1); 
+               (yyval.no)->filhos[0] = (yyvsp[-1].no); 
+               }
+#line 1804 "AnalisadorLexico.tab.c"
+    break;
+
+  case 41: /* factor: TOK_INT  */
+#line 231 "AnalisadorLexico.y"
+                 { 
+               (yyval.no) = novo_syntaticno("INT", 0);
+               (yyval.no)->constvalue = (yyvsp[0].valor_int);
+               }
+#line 1813 "AnalisadorLexico.tab.c"
+    break;
+
+  case 42: /* factor: TOK_FLT  */
+#line 235 "AnalisadorLexico.y"
+                 {
+               (yyval.no) = novo_syntaticno("FLOAT", 0);
+               (yyval.no)->constvalue = (yyvsp[0].valor_float);
+               }
+#line 1822 "AnalisadorLexico.tab.c"
+    break;
+
+  case 43: /* factor: TOK_BOOL  */
+#line 239 "AnalisadorLexico.y"
+                   { 
+               (yyval.no) = novo_syntaticno("BOOL", 0);
+               (yyval.no)->constvalue = (yyvsp[0].valor_int);
+         }
+#line 1831 "AnalisadorLexico.tab.c"
+    break;
+
+  case 44: /* factor: TOK_IDENT  */
+#line 243 "AnalisadorLexico.y"
+                   { simbolo *s = simbolo_existe((yyvsp[0].nome));
+                     if (!s) 
+                         s = simbolo_novo((yyvsp[0].nome), TOK_IDENT);
+                     (yyval.no) = novo_syntaticno("IDENT", 0);
+                     (yyval.no)->sim = s;
+                    }
+#line 1842 "AnalisadorLexico.tab.c"
+    break;
+
+  case 45: /* declaracao: TOK_LET TOK_IDENT ':' tipo_unidade '=' expr ';'  */
+#line 255 "AnalisadorLexico.y"
+                                                             {
+                 syntaticno *var_node = novo_syntaticno("IDENT", 0);
+                 simbolo *s = simbolo_existe((yyvsp[-5].nome));
+                 if (!s) 
+                     s = simbolo_novo((yyvsp[-5].nome), TOK_IDENT);
+                 var_node->sim = s;
+                 
+                 (yyval.no) = novo_syntaticno("LET", 3);
+                 (yyval.no)->filhos[0] = var_node;
+                 (yyval.no)->filhos[1] = (yyvsp[-3].no);
+                 (yyval.no)->filhos[2] = (yyvsp[-1].no);
+               }
+#line 1859 "AnalisadorLexico.tab.c"
+    break;
+
+  case 46: /* atribuicao: TOK_IDENT '=' expr ';'  */
+#line 269 "AnalisadorLexico.y"
+                                    {
+                 syntaticno *var_node = novo_syntaticno("IDENT", 0);
+                 var_node->sim = simbolo_existe((yyvsp[-3].nome));
+                 if (!var_node->sim) yyerror("Variavel nao declarada");
+                 
+                 (yyval.no) = novo_syntaticno("=", 2);
+                 (yyval.no)->filhos[0] = var_node;
+                 (yyval.no)->filhos[1] = (yyvsp[-1].no);
+             }
+#line 1873 "AnalisadorLexico.tab.c"
+    break;
+
+  case 47: /* comando_print: TOK_PRINT expr ';'  */
+#line 280 "AnalisadorLexico.y"
+                                   {
+                         (yyval.no) = novo_syntaticno("PRINT", 1); 
+                         (yyval.no)->filhos[0] = (yyvsp[-1].no); 
+                        }
+#line 1882 "AnalisadorLexico.tab.c"
+    break;
+
+  case 48: /* tipo_unidade: tipo_unidade '*' fator_unidade  */
+#line 286 "AnalisadorLexico.y"
+                                              {
+                                   (yyval.no) = novo_syntaticno("*", 2); 
+                                   (yyval.no)->filhos[0] = (yyvsp[-2].no); 
+                                   (yyval.no)->filhos[1] = (yyvsp[0].no);            
+                              }
+#line 1892 "AnalisadorLexico.tab.c"
+    break;
+
   case 49: /* tipo_unidade: tipo_unidade '/' fator_unidade  */
-#line 143 "AnalisadorLexico.y"
-                                              { (yyval.node) = new BinaryOp((yyvsp[-2].node), "/", (yyvsp[0].node)); }
-#line 1760 "AnalisadorLexico.tab.c"
+#line 291 "AnalisadorLexico.y"
+                                              { 
+                                   (yyval.no) = novo_syntaticno("/", 2); 
+                                   (yyval.no)->filhos[0] = (yyvsp[-2].no); 
+                                   (yyval.no)->filhos[1] = (yyvsp[0].no);                          
+                              }
+#line 1902 "AnalisadorLexico.tab.c"
     break;
 
   case 50: /* tipo_unidade: fator_unidade  */
-#line 144 "AnalisadorLexico.y"
-                             { (yyval.node) = (yyvsp[0].node); }
-#line 1766 "AnalisadorLexico.tab.c"
+#line 296 "AnalisadorLexico.y"
+                              { (yyval.no) = (yyvsp[0].no); }
+#line 1908 "AnalisadorLexico.tab.c"
     break;
 
   case 51: /* fator_unidade: TOK_IDENT  */
-#line 147 "AnalisadorLexico.y"
-                          { (yyval.node) = new Load((yyvsp[0].nome)); }
-#line 1772 "AnalisadorLexico.tab.c"
+#line 299 "AnalisadorLexico.y"
+                          { simbolo *s = simbolo_existe((yyvsp[0].nome));
+                     if (!s) 
+                         s = simbolo_novo((yyvsp[0].nome), TOK_IDENT);
+                     (yyval.no) = novo_syntaticno("IDENT", 0);
+                     (yyval.no)->sim = s;
+                    }
+#line 1919 "AnalisadorLexico.tab.c"
     break;
 
   case 52: /* fator_unidade: '(' tipo_unidade ')'  */
-#line 148 "AnalisadorLexico.y"
-                                     { (yyval.node) = (yyvsp[-1].node); }
-#line 1778 "AnalisadorLexico.tab.c"
+#line 305 "AnalisadorLexico.y"
+                                     { 
+                    (yyval.no) = novo_syntaticno("()", 1); 
+                    (yyval.no)->filhos[0] = (yyvsp[-1].no); 
+                    }
+#line 1928 "AnalisadorLexico.tab.c"
     break;
 
 
-#line 1782 "AnalisadorLexico.tab.c"
+#line 1932 "AnalisadorLexico.tab.c"
 
       default: break;
     }
@@ -2002,4 +2152,90 @@ yyreturnlab:
   return yyresult;
 }
 
-#line 151 "AnalisadorLexico.y"
+#line 311 "AnalisadorLexico.y"
+
+
+int yywrap(void) {
+    return 1;
+}
+
+int yyerror(const char *s) {
+     errorc++; 
+     fprintf(stderr, "Erro na linha %d: %s\n", yylineno, s);
+    return 1;
+}
+
+simbolo *simbolo_novo(char *nome, int token) {
+     tabela_simbolos[simbolo_qtd].nome = nome;
+     tabela_simbolos[simbolo_qtd].token = token;
+     simbolo *result = &tabela_simbolos[simbolo_qtd];
+     simbolo_qtd++;
+     return result;
+}
+
+simbolo *simbolo_existe(char *nome) {
+     for (int i = 0; i < simbolo_qtd; i++) {
+         if (strcmp(tabela_simbolos[i].nome, nome) == 0) {
+             return &tabela_simbolos[i];
+         }
+     }
+     return NULL;
+}
+
+syntaticno *novo_syntaticno(char *label, int filhos) {
+     static int nid = 0;
+     int s = sizeof(syntaticno);
+     if (filhos > 1)
+         s += sizeof(syntaticno*) * (filhos - 1);
+     syntaticno  *n = (syntaticno*)calloc(1, s);
+     n->id = nid++;
+     n->label = label;
+     n->qtdfilhos = filhos;
+     return n;
+}
+
+void print_tree(syntaticno *n) {
+     if (n->sim)
+          printf("\tn%d [label=\"%s\"];\n", n->id, n->sim->nome);
+     else if (strcmp(n->label, "INT") == 0)
+          printf("\tn%d [label=\"%g\"];\n", n->id, n->constvalue);
+     else if (strcmp(n->label, "FLOAT") == 0)
+          printf("\tn%d [label=\"%g\"];\n", n->id, n->constvalue);
+     else
+          printf("\tn%d [label=\"%s\"];\n", n->id, n->label);
+
+     for (int i = 0; i < n->qtdfilhos; i++) 
+         print_tree(n->filhos[i]);
+     for (int i = 0; i < n->qtdfilhos; i++) 
+          printf("\tn%d -- n%d;\n", n->id, n->filhos[i]->id);
+}
+ 
+void debug(syntaticno *no) {
+     printf("Símbolos:\n");
+     for (int i = 0; i < simbolo_qtd; i++) {
+         printf("Nome: %s, Token: %d\n", tabela_simbolos[i].nome, tabela_simbolos[i].token);
+     }
+     printf("\nÁrvore Sintática Abstrata:\n");
+     printf("graph prog {\n");
+     print_tree(no);
+     printf("}\n");
+}
+
+
+int main(int argc, char *argv[]) {
+    
+    extern FILE *yyin;
+
+    if (argc > 1) {
+        yyin = fopen(argv[1], "r");
+
+        if (yyin == NULL) {
+            fprintf(stderr, "Erro na leitura do arquivo'%s'\n", argv[1]);
+            return 1;
+        }
+    }
+
+    yyparse();
+
+    return 0;
+}

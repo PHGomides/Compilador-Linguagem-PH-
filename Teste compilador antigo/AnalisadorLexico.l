@@ -1,15 +1,6 @@
 %{
 #include <stdio.h>
-#include <string.h>
-#include <stdlib.h>
-#include <iostream>
-#include "node.h"
 #include "AnalisadorLexico.tab.h"
-
-int yyerror(const char *s);
-
-char *build_file_name;
-int errorcount = 0;
 %}
 
 %option yylineno
@@ -45,35 +36,18 @@ int errorcount = 0;
 "!"             { return '!'; }
 "true"          { yylval.valor_int = 1; return TOK_BOOL; } 
 "false"         { yylval.valor_int = 0; return TOK_BOOL; } 
+[0-9]+\.[0-9]+  { 
+    yylval.valor_float = atof(yytext);
+    return TOK_FLT; 
+}
+[0-9]+          { 
+    yylval.valor_int = atoi(yytext);
+    return TOK_INT; 
+}
+[a-zA-Z_][a-zA-Z_0-9]* { 
+    yylval.nome = strdup(yytext);
+    return TOK_IDENT; 
+}
 
-[0-9]+          { yylval.valor_int = atoi(yytext); return TOK_INT; }
-[0-9]+\.[0-9]+  { yylval.valor_float = atof(yytext); return TOK_FLT; }
-[a-zA-Z_][a-zA-Z_0-9]* { yylval.nome = strdup(yytext); return TOK_IDENT; }
-
-. { printf("Caractere invalido: %c\n", yytext[0]); }
+.               { printf("Caractere não presente no alfabeto %c\n", yytext[0] ); }
 %%
-
-// yywrap e main implementados aqui, dispensando o uso de -lfl
-int yywrap() { return 1; }
-
-int yyerror(const char *s) {
-    fprintf(stderr, "%d: %s\n", yylineno, s);
-    errorcount++;
-    return 1;
-}
-
-int main(int argc, char *argv[]) {
-    if (argc <= 1) {
-        fprintf(stderr, "Uso: %s arquivo_fonte\n", argv[0]);
-        return 1;
-    }
-    build_file_name = argv[1];
-    yyin = fopen(build_file_name, "r");
-    if (yyin == NULL) {
-        fprintf(stderr, "Erro ao abrir arquivo %s.\n", build_file_name);
-        return 1;
-    }
-    yyparse();
-    if (yyin) fclose(yyin);
-    return errorcount;
-}
