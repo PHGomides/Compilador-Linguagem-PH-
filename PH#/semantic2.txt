@@ -1,0 +1,7 @@
+let distancia: m = 100;
+let tempo: s = 10;
+let absurdo: m = distancia + tempo;
+
+if (distancia > (tempo + 10)) {
+    print 0;
+}

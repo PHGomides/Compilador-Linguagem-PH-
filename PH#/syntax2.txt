@@ -1,0 +1,16 @@
+let x: num = 0;
+let max: num = 10;
+let teste: bool = true;
+
+if (teste) {
+    print x;
+} else {
+    print max;
+}
+
+while x < max {
+    x = x + 1;
+    if (x == 5) {
+        print x;
+    }
+}

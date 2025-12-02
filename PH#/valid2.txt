@@ -1,0 +1,16 @@
+let temperatura: k = 300;
+let pressao: pa = 100;
+let alerta: bool = false;
+
+if (temperatura > 200 && pressao < 150) {
+    let fator: num = 2;
+    if (pressao * fator > 180) {
+        alerta = true;
+    } else {
+        print 0;
+    }
+} else {
+    print 1;
+}
+
+print alerta;

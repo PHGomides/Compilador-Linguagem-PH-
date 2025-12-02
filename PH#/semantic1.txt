@@ -1,0 +1,9 @@
+let x: num = 10;
+
+if (x > 5) {
+  
+    let y: num = 1;
+    let y: num = 2; 
+    
+    print z;
+}

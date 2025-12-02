@@ -1,0 +1,5 @@
+let tempo: s = 10;
+let distancia: m = 100;
+let velocidade: m/s = distancia; 
+
+distancia = tempo;

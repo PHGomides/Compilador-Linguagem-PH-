@@ -1,0 +1,16 @@
+let a: m = 10.0;
+let b: m = 20.0;
+let ativo: bool = true;
+
+while (a < b) {
+    a = a + 1.0;
+    if (ativo) {
+        print a
+    } else {
+        print b;
+    }
+}
+
+do {
+    b = b - 1.0;
+} while (b > 0.0);

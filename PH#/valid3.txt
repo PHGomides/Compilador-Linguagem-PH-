@@ -1,0 +1,14 @@
+let energia: j = 100.0;
+let perda: j = 5.0;
+let contador: num = 0;
+
+do {
+    energia = energia - perda;
+    contador = contador + 1;
+    
+    if (contador == 10) {
+        perda = perda * 2;
+    }
+} while (energia > 0.0);
+
+print contador;

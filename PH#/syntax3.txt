@@ -1,0 +1,14 @@
+let energia: j = 100.0;
+let tempo: s = 0.0;
+
+do {
+    tempo = tempo + 1.0;
+    energia = energia - 10.0;
+
+    if (energia < 50.0) {
+        print 1;
+        let alerta: bool = true;
+    
+} while (energia > 0.0);
+
+print tempo;

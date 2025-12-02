@@ -1,0 +1,18 @@
+let altura: m = 100.0;
+let gravidade: m/s/s = 9.8;
+let velocidade: m/s = 0.0;
+let tempo: s = 0.0;
+let dt: s = 1.0;
+
+while (altura > 0.0) {
+    velocidade = velocidade + gravidade * dt;
+    altura = altura - velocidade * dt;
+    tempo = tempo + dt;
+    
+    if (altura < 0.0) {
+        print 0.0;
+    } else {
+        print altura;
+    }
+}
+print tempo;

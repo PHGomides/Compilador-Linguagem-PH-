@@ -9,7 +9,7 @@
 int yyerror(const char *s);
 
 char *build_file_name;
-int errorcount = 0;
+int contagemErros = 0;
 %}
 
 %option yylineno
@@ -51,17 +51,16 @@ int errorcount = 0;
 [a-zA-Z_][a-zA-Z_0-9]* { yylval.nome = strdup(yytext); return TOK_IDENT; }
 
 . { 
-    
     fprintf(stderr, "Erro Lexico na linha %d: Caractere invalido '%c'\n", yylineno, yytext[0]);
-    errorcount++;
+    contagemErros++;
 }
 %%
 
 int yywrap() { return 1; }
 
 int yyerror(const char *s) {
-    fprintf(stderr, "Erro de Sintaxe na linha %d: %s\n", yylineno, s);
-    errorcount++;
+    fprintf(stderr, "Erro Sintatico na linha %d: %s\n", yylineno, s);
+    contagemErros++;
     return 1;
 }
 
@@ -79,19 +78,17 @@ int main(int argc, char *argv[]) {
 
     printf("Iniciando compilacao de: %s\n", build_file_name);
     
-    
     yyparse();
 
     if (yyin) fclose(yyin);
 
-    // Resumo final dos erros
     printf("\n----------------------------------\n");
-    if (errorcount == 0) {
+    if (contagemErros == 0) {
         printf("SUCESSO: O codigo foi compilado sem erros.\n");
     } else {
-        printf("FALHA: Encontrados %d erro(s) durante a compilacao.\n", errorcount);
+        printf("FALHA: Encontrados %d erro(s) durante a compilacao.\n", contagemErros);
     }
     printf("----------------------------------\n");
 
-    return errorcount;
+    return contagemErros;
 }
